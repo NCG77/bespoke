@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { CSSProperties } from "react";
 import Logo from "./Assets/Logo.png";
 
 const theme = {
@@ -12,7 +11,7 @@ const theme = {
     },
 };
 
-const LoginScreen = () => {
+const SignupScreen = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState({ value: "", error: "" });
     const [password, setPassword] = useState({ value: "", error: "" });
@@ -82,7 +81,7 @@ const LoginScreen = () => {
 
 const styles: { [key: string]: CSSProperties } = {
     background: {
-        backgroundImage: "linear-gradient(to right bottom, #6a11cb, #2575fc)", // Modern purple-to-blue gradient
+        backgroundImage: "linear-gradient(to right bottom, #6a11cb, #2575fc)",
         backgroundSize: "cover",
         width: "100%",
         height: "100vh",
@@ -168,4 +167,4 @@ const styles: { [key: string]: CSSProperties } = {
     },
 };
 
-export default LoginScreen;
+export default SignupScreen;
