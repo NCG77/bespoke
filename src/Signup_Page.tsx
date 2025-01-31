@@ -13,6 +13,7 @@ const theme = {
 
 const SignupScreen = () => {
     const navigate = useNavigate();
+    const [name, setName] = useState({ value: "", error: "" });
     const [email, setEmail] = useState({ value: "", error: "" });
     const [password, setPassword] = useState({ value: "", error: "" });
     const [loading, setLoading] = useState(false);
@@ -31,7 +32,16 @@ const SignupScreen = () => {
                         alt="Logo"
                     />
 
-                    <h1 style={styles.header}>Welcome Back!</h1>
+                    <h1 style={styles.header}>Create Account!</h1>
+                    <input
+                        style={styles.input}
+                        type="text"
+                        placeholder="Name"
+                        value={name.value}
+                        onChange={(e) => setName({ value: e.target.value, error: "" })}
+                    />
+                    {name.error && <p style={styles.errorText}>{name.error}</p>}
+
                     <input
                         style={styles.input}
                         type="email"

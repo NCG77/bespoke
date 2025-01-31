@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSProperties } from "react";
 import Logo from "./Assets/Logo.png";
+import signup from "./Signup_Page.tsx";
 
 const theme = {
     colors: {
@@ -70,7 +71,7 @@ const LoginScreen = () => {
 
                     <div style={styles.row}>
                         <p>You do not have an account yet? </p>
-                        <button onClick={() => navigate("/signup")} style={styles.link}>
+                        <button onClick={() => navigate("/Sigup")} style={styles.link}>
                             Create!
                         </button>
                     </div>
@@ -82,7 +83,7 @@ const LoginScreen = () => {
 
 const styles: { [key: string]: CSSProperties } = {
     background: {
-        backgroundImage: "linear-gradient(to right bottom, #6a11cb, #2575fc)", // Modern purple-to-blue gradient
+        backgroundImage: "linear-gradient(to right bottom, #6a11cb, #2575fc)",
         backgroundSize: "cover",
         width: "100%",
         height: "100vh",
