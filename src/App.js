@@ -1,18 +1,17 @@
 import React from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom"; // Import routing components
+import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import LoginScreen from "./Login_Page.tsx";
-import SignupScreen from "./Signup_Page.tsx";
+import HomePage from "./Components/HomePage.tsx"
+import LoginScreen from "./Components/Login_Page.tsx";
+import SignupScreen from "./Components/Signup_Page.tsx";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        {/* Define routes for Login and Signup screens */}
-        <Route path="/" element={<LoginScreen />} /> {/* Default route (Login) */}
-        <Route path="/signup" element={<SignupScreen />} /> {/* Signup route */}
-      </Routes>
-    </BrowserRouter>
+    <Routes>
+      <Route path="/" element={<HomePage />} />
+      <Route path="/Login" element={<LoginScreen />} />
+      <Route path="/signup" element={<SignupScreen />} />
+    </Routes>
   );
 }
 

@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CSSProperties } from "react";
-import Logo from "./Assets/Logo.png";
-import signup from "./Signup_Page.tsx";
+import Logo from "../Assets/Logo.png";
 
 const theme = {
     colors: {
@@ -17,7 +16,7 @@ const LoginScreen = () => {
     const navigate = useNavigate();
     const [email, setEmail] = useState({ value: "", error: "" });
     const [password, setPassword] = useState({ value: "", error: "" });
-    const [loading, setLoading] = useState(false);
+    //const [loading, setLoading] = useState(false);
 
     const onLoginPressed = async () => {
         // Your login logic here
@@ -71,7 +70,7 @@ const LoginScreen = () => {
 
                     <div style={styles.row}>
                         <p>You do not have an account yet? </p>
-                        <button onClick={() => navigate("/Sigup")} style={styles.link}>
+                        <button onClick={() => navigate("/Signup")} style={styles.link}>
                             Create!
                         </button>
                     </div>

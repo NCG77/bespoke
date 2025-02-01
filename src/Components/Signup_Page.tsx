@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import Logo from "./Assets/Logo.png";
+import Logo from "../Assets/Logo.png";
 
 const theme = {
     colors: {
@@ -16,7 +16,7 @@ const SignupScreen = () => {
     const [name, setName] = useState({ value: "", error: "" });
     const [email, setEmail] = useState({ value: "", error: "" });
     const [password, setPassword] = useState({ value: "", error: "" });
-    const [loading, setLoading] = useState(false);
+    //const [loading, setLoading] = useState(false);
 
     const onLoginPressed = async () => {
         // Your login logic here
