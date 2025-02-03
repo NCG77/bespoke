@@ -1,0 +1,166 @@
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.logo {
+    margin-left: auto;
+    height: 50px;
+}
+
+.navigation ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.navigation li {
+    margin-left: 20px;
+    position: relative;
+}
+
+.navigation a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+}
+
+.dropdown-trigger {
+    cursor: pointer;
+}
+
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    z-index: 1;
+    display: none;
+}
+
+.dropdown-trigger:hover .dropdown {
+    display: block;
+}
+
+.dropdown li {
+    margin: 5px 0;
+}
+
+.cta {
+    display: flex;
+    align-items: center;
+}
+
+.cta button {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.demo-button {
+    background-color: transparent;
+    color: #333;
+    border: 1px solid #333;
+}
+
+.login-button {
+    background-color: transparent;
+    color: #333;
+}
+
+.get-notion-free {
+    background-color: #000;
+    color: #fff;
+}
+
+.footer {
+    background-color: #f8f8f8;
+    padding: 40px 20px;
+    font-family: sans-serif;
+}
+
+.footer-content {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.footer-section {
+    flex: 1 1 200px;
+    margin-bottom: 20px;
+}
+
+.footer-section h3 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.footer-section ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-section li {
+    margin-bottom: 5px;
+}
+
+.footer-section a {
+    text-decoration: none;
+    color: #666;
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 20px;
+    border-top: 1px solid #ddd;
+    margin-top: 20px;
+}
+
+.footer-bottom p {
+    margin-bottom: 10px;
+    color: #666;
+}
+
+.footer-legal {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+.footer-legal li {
+    margin: 0 10px;
+}
+
+.footer-legal a {
+    color: #666;
+}
+
+.footer-section img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
+}
+
+@media (max-width: 768px) {
+    .footer-section {
+        flex: 1 1 45%;
+    }
+}
+
+@media (max-width: 500px) {
+    .footer-section {
+        flex: 1 1 100%;
+    }
+}

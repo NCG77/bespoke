@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route } from "react-router-dom";
 import "./App.css";
-import HomePage from "./Components/HomePage.tsx"
+import HomePage from "./Components/Home_Page/HomePage.tsx"
 import LoginScreen from "./Components/Login_Page.tsx";
 import SignupScreen from "./Components/Signup_Page.tsx";
 
