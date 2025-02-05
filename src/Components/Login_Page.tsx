@@ -62,10 +62,10 @@ const LoginScreen = () => {
 
                     <button
                         onClick={onLoginPressed}
-                        disabled={loading}
+                        /* disabled={loading} */
                         style={styles.button}
                     >
-                        {loading ? "Logging In..." : "Next"}
+                        {/*  {loading ? "Logging In..." : "Next"} */}
                     </button>
 
                     <div style={styles.row}>

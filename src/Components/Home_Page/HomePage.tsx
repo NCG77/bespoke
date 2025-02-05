@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import './Homepage.css';
-import Logo from '../../Assets/Logo.png'; // Make sure the path is correct
-/* 
-import HeroImage from './hero_image.jpg'; // Import your hero image
-import Feature1Image from './feature1.jpg'; // Example feature image
-import Feature2Image from './feature2.jpg'; // Example feature image
-import Feature3Image from './feature3.jpg'; // Example feature image
- */
+import { useNavigate } from "react-router-dom";
+
+import Logo from '../../Assets/Logo.png';
+import HeroImage from '../../Assets/Maini.png';
+import Feature1Image from '../../Assets/Analysis.png';
+import Feature2Image from '../../Assets/Manage.png';
+import Feature3Image from '../../Assets/Main.png';
 
 const Homepage = () => {
+    const navigate = useNavigate();
     const [isDropdownVisible, setIsDropdownVisible] = useState(false);
 
     const toggleDropdown = () => {
@@ -18,17 +19,23 @@ const Homepage = () => {
     return (
         <div>
             <header className="header">
-                {/* ... (Header code remains the same) ... */}
+                <div className="logo">
+                    <img src={Logo} alt="Your Logo" />
+                </div>
+                <div className="cta">
+                    <button className="demo-button" onClick={() => navigate("/Signup")}>Request a demo</button>
+                    <button className="login-button" onClick={() => navigate("/Login")}>Log in</button>
+                </div>
             </header>
 
             <section className="hero">
                 <div className="hero-content">
                     <h1>Bespoke: Your AI-Powered Healthcare Companion</h1>
                     <p>Revolutionizing healthcare with intelligent voice analysis and prescription management.</p>
-                    <button className="cta-button">Get Started</button> {/* Call to action button */}
+                    <button className="cta-button">Get Started</button>
                 </div>
                 <div className="hero-image">
-                    <img src={HeroImage} alt="Healthcare Hero" /> {/* Hero image */}
+                    <img src={HeroImage} alt="Healthcare Hero" />
                 </div>
             </section>
 
@@ -63,12 +70,18 @@ const Homepage = () => {
 
             <section className="cta-section">
                 <h2>Ready to experience the future of healthcare?</h2>
-                <button className="cta-button">Request a Demo</button>
+                <button className="cta-button" onClick={() => navigate("/Signup")}>Request a Demo</button>
             </section>
 
 
             <footer className="footer">
-                {/* ... (Footer code remains the same) ... */}
+                <div className="footer-bottom">
+                    <p>&copy; {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+                    <ul className="footer-legal">
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Terms of Service</a></li>
+                    </ul>
+                </div>
             </footer>
         </div>
     );
