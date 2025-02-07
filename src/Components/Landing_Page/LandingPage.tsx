@@ -76,7 +76,7 @@ const Landingpage = () => {
 
             <footer className="footer">
                 <div className="footer-bottom">
-                    <p>&copy; {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
+                    <p>&copy; {new Date().getFullYear()} Bespoke. All rights reserved.</p>
                     <ul className="footer-legal">
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Service</a></li>

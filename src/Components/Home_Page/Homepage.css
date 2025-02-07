@@ -1,16 +1,6 @@
-/* Mainpage.css */
-
-/* General Styles */
-body {
-    font-family: sans-serif;
-    margin: 0;
-}
-
-/* Header Styles */
 .header {
     display: flex;
     justify-content: space-between;
-    /* Space logo, nav, buttons */
     align-items: center;
     padding: 20px;
     background-color: #fff;
@@ -30,7 +20,7 @@ body {
 
 .navigation li {
     margin-left: 20px;
-    cursor: pointer;
+    position: relative;
 }
 
 .navigation a {
@@ -39,46 +29,156 @@ body {
     font-weight: 500;
 }
 
-.action-buttons {
-    /* Style for the container */
-    display: flex;
-    gap: 10px;
-    /* Space between buttons */
+.dropdown-trigger {
+    cursor: pointer;
 }
 
-.action-button {
-    /* Style for each button */
+.dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    padding: 10px;
+    z-index: 1;
+    display: none;
+}
+
+.dropdown-trigger:hover .dropdown {
+    display: block;
+}
+
+.dropdown li {
+    margin: 5px 0;
+}
+
+.cta {
+    display: flex;
+    align-items: center;
+}
+
+.cta button {
     padding: 10px 20px;
+    margin-left: 10px;
     border: none;
-    background-color: #007bff;
-    /* Example color */
-    color: #fff;
-    border-radius: 5px;
     cursor: pointer;
     font-weight: 500;
 }
 
-/* Main Content Styles */
-.main-container {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
+.demo-button {
+    background-color: transparent;
+    color: #333;
+    border: 1px solid #333;
 }
 
-.main-content {
+.login-button {
+    background-color: rgb(0, 123, 255);
+    color: #ffffff;
+}
+
+.get-notion-free {
+    background-color: #000;
+    color: #fff;
+}
+
+.hero {
+    display: flex;
+    align-items: center;
+    padding: 150px;
+    background-color: #f2f2f2;
+}
+
+.hero-content {
+    /*   */
+    margin-right: 40px;
+}
+
+.hero h1 {
+    font-size: 3em;
+    margin-bottom: 20px;
+}
+
+.hero p {
+    font-size: 1.2em;
+    margin-bottom: 30px;
+}
+
+.cta-button {
+    padding: 15px 30px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+}
+
+.hero-image {
     flex: 1;
+    text-align: center;
+}
+
+.hero-image img {
+    max-width: 50%;
+    height: auto;
+}
+
+.features {
+    display: flex;
+    justify-content: space-around;
+    padding: 80px;
+    background-color: #fff;
+}
+
+.feature {
+    flex: 1;
+    text-align: center;
     padding: 20px;
 }
 
-/* Home Content Styles */
-.home-content {
-    /* Styles for the home page content */
+.feature img {
+    width: 200px;
+    height: auto;
+    margin-bottom: 20px;
 }
 
-/* Footer Styles */
+.feature h2 {
+    margin-bottom: 10px;
+}
+
+.testimonials {
+    background-color: #f8f8f8;
+    padding: 80px;
+    text-align: center;
+}
+
+.testimonial {
+    margin: 20px auto;
+    max-width: 600px;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.cta-section {
+    text-align: center;
+    padding: 80px;
+    background-color: #007bff;
+    color: #fff;
+}
+
+.cta-section h2 {
+    margin-bottom: 30px;
+}
+
+.cta-section .cta-button {
+    background-color: #fff;
+    color: #007bff;
+}
+
 .footer {
     background-color: #f8f8f8;
-    /* Notion-like light gray */
     padding: 40px 20px;
     font-family: sans-serif;
 }
@@ -86,7 +186,6 @@ body {
 .footer-content {
     display: flex;
     flex-wrap: wrap;
-    /* Allow wrapping on smaller screens */
     justify-content: space-around;
     max-width: 1200px;
     margin: 0 auto;
@@ -94,7 +193,6 @@ body {
 
 .footer-section {
     flex: 1 1 200px;
-    /* Adjust width as needed */
     margin-bottom: 20px;
 }
 
@@ -115,14 +213,12 @@ body {
 .footer-section a {
     text-decoration: none;
     color: #666;
-    /* Slightly lighter link color */
 }
 
 .footer-bottom {
     text-align: center;
     padding-top: 20px;
     border-top: 1px solid #ddd;
-    /* Subtle separator line */
     margin-top: 20px;
 }
 
@@ -146,11 +242,143 @@ body {
     color: #666;
 }
 
-/* Responsive Design (Adjust as needed) */
-@media (max-width: 768px) {
-    /* Adjust styles for tablets and smaller screens */
+.footer-section img {
+    width: 20px;
+    height: 20px;
+    margin-right: 10px;
 }
 
-@media (max-width: 500px) {
-    /* Adjust styles for mobile devices */
+.how-it-works {
+    padding: 80px;
+    text-align: center;
+    background-color: #fff;
+}
+
+.how-it-works h2 {
+    margin-bottom: 40px;
+}
+
+.how-it-works-steps {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.step {
+    flex: 1 1 250px;
+    text-align: center;
+    padding: 20px;
+    margin-bottom: 20px;
+}
+
+.step img {
+    width: 150px;
+    height: auto;
+    margin-bottom: 15px;
+    border-radius: 50%;
+}
+
+.step h3 {
+    margin-bottom: 10px;
+}
+
+.testimonials {
+    background-color: #f8f8f8;
+    padding: 80px;
+    text-align: center;
+}
+
+.testimonials h2 {
+    margin-bottom: 40px;
+}
+
+.testimonial-container {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.testimonial {
+    max-width: 45%;
+    padding: 30px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    position: relative;
+}
+
+.testimonial-image {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    border: 2px solid #fff;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+/* ... (Previous CSS styles) */
+
+/* Hero Section Styles */
+.hero {
+    display: flex;
+    flex-direction: column;
+    /* Stack content and buttons vertically */
+    align-items: center;
+    /* Center horizontally */
+    padding: 80px;
+    background-color: #f0f0f0;
+}
+
+.hero-content {
+    text-align: center;
+    /* Center the text within hero content */
+    margin-bottom: 40px;
+    /* Space between content and buttons */
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 20px;
+    /* Space between buttons */
+    align-items: center;
+    /* Vertically center buttons */
+}
+
+.hero-action-button,
+.mic-button {
+    padding: 15px 30px;
+    background-color: #007bff;
+    /* Example color */
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 1.1em;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.mic-button {
+    background-color: transparent;
+    /* Make mic button background transparent */
+    border: none;
+    padding: 0;
+    /* Remove default padding */
+    width: 50px;
+    /* Set a specific width for the mic button */
+    height: 50px;
+    /* Set a specific height for the mic button */
+    border-radius: 50%;
+    /* Make the mic button circular */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.mic-icon {
+    width: 100%;
+    height: 100%;
 }
