@@ -1,85 +1,77 @@
 import React, { useState } from 'react';
-import './Homepage.css';
-import { useNavigate } from "react-router-dom";
+import './homepage.css';
+import Logo from './../../Assets/Logo.png'; // Replace with your logo path
 
-import Logo from '../../Assets/Logo.png';
-import HeroImage from '../../Assets/Maini.png';
-import Feature1Image from '../../Assets/Analysis.png';
-import Feature2Image from '../../Assets/Manage.png';
-import Feature3Image from '../../Assets/Main.png';
+const Mainpage: React.FC = () => {
+    const [activePage, setActivePage] = useState('home'); // Track active page (optional)
 
-const Homepage = () => {
-    const navigate = useNavigate();
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
-    const toggleDropdown = () => {
-        setIsDropdownVisible(!isDropdownVisible);
+    const handleNavigation = (page: string) => {
+        setActivePage(page); // Update active page (optional)
     };
 
     return (
-        <div>
+        <div className="main-container">
             <header className="header">
                 <div className="logo">
-                    <img src={Logo} alt="Your Logo" />
+                    <img src={Logo} alt="Logo" />
                 </div>
-                <div className="cta">
-                    <button className="demo-button" onClick={() => navigate("/Signup")}>Request a demo</button>
-                    <button className="login-button" onClick={() => navigate("/Login")}>Log in</button>
+                <nav className="navigation">
+                    <ul>
+                        <li onClick={() => handleNavigation('product')}><a href="#">Product</a></li> {/* Example */}
+                        <li onClick={() => handleNavigation('teams')}><a href="#">Teams</a></li> {/* Example */}
+                        <li onClick={() => handleNavigation('individuals')}><a href="#">Individuals</a></li> {/* Example */}
+                    </ul>
+                </nav>
+                <div className="action-buttons"> {/* Container for action buttons */}
+                    <button className="action-button">Voice Record</button>
+                    <button className="action-button">Upload Image</button>
+                    <button className="action-button">Check Records</button>
                 </div>
             </header>
 
-            <section className="hero">
-                <div className="hero-content">
-                    <h1>Bespoke: Your AI-Powered Healthcare Companion</h1>
-                    <p>Revolutionizing healthcare with intelligent voice analysis and prescription management.</p>
-                    <button className="cta-button">Get Started</button>
-                </div>
-                <div className="hero-image">
-                    <img src={HeroImage} alt="Healthcare Hero" />
-                </div>
-            </section>
-
-            <section className="features">
-                <div className="feature">
-                    <img src={Feature1Image} alt="Voice Analysis" />
-                    <h2>Intelligent Voice Analysis</h2>
-                    <p>Capture and analyze doctor-patient conversations in real-time. Extract key medical insights and streamline your workflow.</p>
-                </div>
-                <div className="feature">
-                    <img src={Feature2Image} alt="Prescription Management" />
-                    <h2>Effortless Prescription Management</h2>
-                    <p>Store and organize patient prescriptions securely. Access and manage them anytime, anywhere.</p>
-                </div>
-                <div className="feature">
-                    <img src={Feature3Image} alt="AI-Powered Insights" />
-                    <h2>AI-Powered Insights</h2>
-                    <p>Gain valuable insights from voice data and prescriptions. Improve patient care and make data-driven decisions.</p>
-                </div>
-            </section>
-
-            <section className="testimonials">
-                <h2>What Our Users Say</h2>
-                <div className="testimonial">
-                    <p>"Bespoke has transformed the way I manage patient information. The voice analysis feature is incredibly helpful!" - Dr. Smith</p>
-                </div>
-                <div className="testimonial">
-                    <p>"I love the convenience of having all my prescriptions stored in one place. Bespoke is a game-changer!" - John Doe</p>
-                </div>
-            </section>
-
-
-            <section className="cta-section">
-                <h2>Ready to experience the future of healthcare?</h2>
-                <button className="cta-button" onClick={() => navigate("/Signup")}>Request a Demo</button>
-            </section>
-
+            <main className="main-content">
+                {/* Conditionally render content (if needed) */}
+                {activePage === 'home' && <HomeContent />}
+                {activePage === 'product' && <ProductPage />}
+                {/* ... other pages */}
+            </main>
 
             <footer className="footer">
+                <div className="footer-content">
+                    <div className="footer-section">
+                        <h3>Product</h3>
+                        <ul>
+                            <li><a href="#">Features</a></li>
+                            <li><a href="#">Pricing</a></li>
+                            <li><a href="#">Integrations</a></li>
+                            <li><a href="#">API</a></li>
+                        </ul>
+                    </div>
+                    <div className="footer-section">
+                        <h3>Company</h3>
+                        <ul>
+                            <li><a href="#">About Us</a></li>
+                            <li><a href="#">Careers</a></li>
+                            <li><a href="#">Blog</a></li>
+                            <li><a href="#">Contact</a></li>
+                        </ul>
+                    </div>
+                    <div className="footer-section">
+                        <h3>Resources</h3>
+                        <ul>
+                            <li><a href="#">Help Center</a></li>
+                            <li><a href="#">Guides</a></li>
+                            <li><a href="#">Templates</a></li>
+                            <li><a href="#">Community</a></li>
+                        </ul>
+                    </div>
+                </div>
                 <div className="footer-bottom">
                     <p>&copy; {new Date().getFullYear()} Your Company Name. All rights reserved.</p>
                     <ul className="footer-legal">
                         <li><a href="#">Privacy Policy</a></li>
                         <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Security</a></li> {/* Example */}
                     </ul>
                 </div>
             </footer>
@@ -87,4 +79,21 @@ const Homepage = () => {
     );
 };
 
-export default Homepage;
+// Example page components (replace with your actual components)
+const HomeContent = () => (
+    <section className="home-content">
+        {/* Your homepage content here */}
+        <h1>Welcome to Bespoke</h1>
+        <p>Your AI-Powered Healthcare Companion</p>
+        {/* ... */}
+    </section>
+);
+
+const ProductPage = () => (
+    <section className="product-page">
+        <h2>Product Features</h2>
+        {/* ... product features, screenshots, etc. */}
+    </section>
+);
+
+export default Mainpage;
