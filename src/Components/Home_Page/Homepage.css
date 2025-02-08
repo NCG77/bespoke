@@ -89,7 +89,6 @@
 }
 
 .hero-content {
-    /*   */
     margin-right: 40px;
 }
 
@@ -320,39 +319,29 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-/* ... (Previous CSS styles) */
-
-/* Hero Section Styles */
 .hero {
     display: flex;
     flex-direction: column;
-    /* Stack content and buttons vertically */
     align-items: center;
-    /* Center horizontally */
     padding: 80px;
     background-color: #f0f0f0;
 }
 
 .hero-content {
     text-align: center;
-    /* Center the text within hero content */
     margin-bottom: 40px;
-    /* Space between content and buttons */
 }
 
 .hero-buttons {
     display: flex;
     gap: 20px;
-    /* Space between buttons */
     align-items: center;
-    /* Vertically center buttons */
 }
 
 .hero-action-button,
 .mic-button {
     padding: 15px 30px;
     background-color: #007bff;
-    /* Example color */
     color: #fff;
     border: none;
     border-radius: 5px;
@@ -363,22 +352,22 @@
 
 .mic-button {
     background-color: transparent;
-    /* Make mic button background transparent */
     border: none;
     padding: 0;
-    /* Remove default padding */
     width: 50px;
-    /* Set a specific width for the mic button */
     height: 50px;
-    /* Set a specific height for the mic button */
     border-radius: 50%;
-    /* Make the mic button circular */
     display: flex;
     align-items: center;
     justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
 }
 
 .mic-icon {
     width: 100%;
     height: 100%;
+    border-radius: 100%;
 }
