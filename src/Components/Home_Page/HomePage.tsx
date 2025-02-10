@@ -1,11 +1,12 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./Chat.css";
-import { ReactComponent as PlayIcon } from './play-button-svgrepo-com.svg';
-import { ReactComponent as PauseIcon } from './stop-button-svgrepo-com.svg';
-import { ReactComponent as SunIcon } from './light-svgrepo-com.svg'; // Import Sun icon
-import { ReactComponent as MoonIcon } from './moon-svgrepo-com.svg'; // Import Moon icon
-import { ReactComponent as BellIcon } from './bell-svgrepo-com.svg'; // Import Bell icon
-import { ReactComponent as SettingsIcon } from './setting-5-svgrepo-com.svg'; // Import Settings icon
+import "./homepage.css";
+import { ReactComponent as PlayIcon } from '../../Assets/play-button-svgrepo-com.svg';
+import { ReactComponent as PauseIcon } from '../../Assets/stop-button-svgrepo-com.svg';
+import { ReactComponent as SunIcon } from '../../Assets/light-svgrepo-com.svg';
+import { ReactComponent as MoonIcon } from '../../Assets/moon-svgrepo-com.svg';
+import { ReactComponent as BellIcon } from '../../Assets/bell-svgrepo-com.svg';
+import { ReactComponent as CrossBellIcon } from '../../Assets/bell-slash-svgrepo-com.svg';
+import { ReactComponent as SettingsIcon } from '../../Assets/setting-5-svgrepo-com.svg';
 
 const Recorder = () => {
     const [isRecording, setIsRecording] = useState(false);
@@ -13,11 +14,10 @@ const Recorder = () => {
     const audioRef = useRef(new Audio());
     const analyserRef = useRef(null);
     const canvasRef = useRef(null);
-    const [isDarkMode, setIsDarkMode] = useState(false); // State for dark mode
-    const [showNotification, setShowNotification] = useState(false); // State for notification
+    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
-        // Apply dark mode class to body
         if (isDarkMode) {
             document.body.classList.add('dark-mode');
         } else {
@@ -105,7 +105,10 @@ const Recorder = () => {
 
     return (
         <div className="recorder-container">
-            <div className="top-right-buttons"> {/* Container for top right buttons */}
+            <div className="top-left-text">
+                <h1>Bespoke</h1>
+            </div>
+            <div className="top-right-buttons">
                 <button className="dark-mode-button" onClick={toggleDarkMode}>
                     {isDarkMode ? <SunIcon /> : <MoonIcon />}
                 </button>
@@ -126,14 +129,14 @@ const Recorder = () => {
                 </button>
             </div>
 
-            <div className="bottom-right-buttons"> {/* Container for bottom right buttons */}
+            <div className="bottom-right-buttons">
                 <button className="notification-button" onClick={toggleNotification}>
-                    <BellIcon />
+                    {showNotification ? <BellIcon /> : <CrossBellIcon />}
                 </button>
             </div>
 
-            <div className="bottom-left-buttons"> {/* Container for bottom left buttons */}
-                <button className="settings-button" onClick={() => { /* Add your settings logic here */ }}>
+            <div className="bottom-left-buttons">
+                <button className="settings-button" onClick={() => { }}>
                     <SettingsIcon />
                 </button>
             </div>
