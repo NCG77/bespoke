@@ -135,7 +135,7 @@ body.dark-mode .cassette {
 }
 
 .top-left-text {
-    top: 20px;
+    top: 0px;
     left: 20px;
 }
 
@@ -172,9 +172,9 @@ body.dark-mode .cassette {
 .dark-mode-button svg,
 .notification-button svg,
 .settings-button svg {
-    width: 50px;
-    height: 50px;
-    fill: #333;
+    width: 75px;
+    height: 75px;
+    /*fill: #333;*/
     transition: fill 0.3s ease;
 }
 

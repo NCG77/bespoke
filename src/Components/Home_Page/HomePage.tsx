@@ -14,7 +14,7 @@ const Recorder: React.FC = () => {
     const audioRef = useRef(new Audio());
     const analyserRef = useRef<AnalyserNode | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const [isDarkMode, setIsDarkMode] = useState(false);
+    const [isDarkMode, setIsDarkMode] = useState(true);
     const [showNotification, setShowNotification] = useState(false);
 
     useEffect(() => {
