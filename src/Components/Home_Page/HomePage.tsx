@@ -64,15 +64,30 @@ const Recorder: React.FC = () => {
             analyserRef.current?.getByteFrequencyData(dataArray);
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            const barWidth = (canvas.width / bufferLength) * 2.5;
+            // Draw the glowing horizontal line
+            ctx.beginPath();
+            ctx.moveTo(0, canvas.height / 2);
+            ctx.lineTo(canvas.width, canvas.height / 2);
+            ctx.strokeStyle = "rgba(255, 50, 50, 0.3)";
+            ctx.lineWidth = 2;
+            ctx.stroke();
+
+            // Draw pulsating vertical lines
+            const barWidth = canvas.width / bufferLength;
             let x = 0;
 
             for (let i = 0; i < bufferLength; i++) {
-                const barHeight = dataArray[i] * 0.5;
-                ctx.fillStyle = `rgb(${barHeight + 100}, 50, 50)`;
-                ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
-                x += barWidth + 1;
+                const barHeight = (dataArray[i] / 255) * (canvas.height / 2);
+                const gradient = ctx.createLinearGradient(x, canvas.height / 2 - barHeight, x, canvas.height / 2 + barHeight);
+                gradient.addColorStop(0, "rgba(255, 50, 50, 0)");
+                gradient.addColorStop(0.5, "rgba(255, 50, 50, 0.8)");
+                gradient.addColorStop(1, "rgba(255, 50, 50, 0)");
+
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x, canvas.height / 2 - barHeight, barWidth, barHeight * 2);
+                x += barWidth;
             }
+
             requestAnimationFrame(draw);
         };
         draw();
@@ -81,7 +96,7 @@ const Recorder: React.FC = () => {
     return (
         <div className="recorder-container">
             <div className="top-left-text">
-                <h1>Bespoke</h1>
+                <h2>Bespoke</h2>
             </div>
             <div className="top-right-buttons">
                 <button className="dark-mode-button" onClick={() => setIsDarkMode(!isDarkMode)}>

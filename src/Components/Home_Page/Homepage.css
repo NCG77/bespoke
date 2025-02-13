@@ -1,4 +1,9 @@
-@import url('https://fonts.googleapis.com/css2?family=Classy+Marisa&display=swap');
+@font-face {
+    font-family: 'Coolfont';
+    src: url('../../Assets/Font/AmaticSC-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
 
 body {
     margin: 0;
@@ -13,6 +18,11 @@ body {
     transition: background-color 0.4s ease, color 0.4s ease;
 }
 
+h2 {
+    font-family: 'Coolfont';
+    height: 400px;
+}
+
 body.dark-mode {
     background-color: #121212;
     color: #ffffff;
@@ -24,7 +34,7 @@ body.dark-mode {
     align-items: center;
     width: 100%;
     max-width: 450px;
-    height: 100%;
+    height: 150%;
     background: rgba(255, 255, 255, 0.9);
     border-radius: 20px;
     padding: 20px;
@@ -58,7 +68,7 @@ body.dark-mode .recorder-container {
 }
 
 body.dark-mode .cassette {
-    background: linear-gradient(135deg, #2a2a2a, #3a3a3a);
+    background: linear-gradient(135deg, #1a1a1a, black);
 }
 
 .record-button {
@@ -174,7 +184,6 @@ body.dark-mode .cassette {
 .settings-button svg {
     width: 75px;
     height: 75px;
-    /*fill: #333;*/
     transition: fill 0.3s ease;
 }
 
@@ -182,4 +191,10 @@ body.dark-mode .dark-mode-button svg,
 body.dark-mode .notification-button svg,
 body.dark-mode .settings-button svg {
     fill: #ffffff;
+}
+
+.visualizer {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
 }
