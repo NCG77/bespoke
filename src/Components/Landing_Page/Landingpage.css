@@ -8,14 +8,11 @@
 .body {
     overflow-y: scroll;
     scrollbar-width: none;
-    /* For Firefox */
     -ms-overflow-style: none;
-    /* For Internet Explorer and Edge */
 }
 
 .body::-webkit-scrollbar {
     display: none;
-    /* For Chrome, Safari, and Opera */
 }
 
 .header {
@@ -321,6 +318,28 @@ h2 {
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
-.h3:hover {
-    color: #b71717;
+.footer-bottom h3 {
+    margin: 0;
+    font-size: 16px;
+    font-weight: 400;
+    position: relative;
+    display: inline-block;
+}
+
+.footer-bottom h3::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -5px;
+    width: 100%;
+    height: 2px;
+    background-color: #000000;
+    transform: scaleX(0);
+    transform-origin: bottom right;
+    transition: transform 0.3s ease;
+}
+
+.footer-bottom h3:hover::after {
+    transform: scaleX(1);
+    transform-origin: bottom left;
 }

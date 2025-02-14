@@ -81,10 +81,12 @@ const Landingpage = () => {
             <footer className="footer">
                 <div className="footer-bottom">
                     <h3>&copy; {new Date().getFullYear()} Bespoke.</h3>
+                    <br />
+                    <br />
                     <h3>All rights reserved.</h3>
                 </div>
-            </footer>
-        </div>
+            </footer >
+        </div >
     );
 };
 
