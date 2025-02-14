@@ -12,16 +12,18 @@ function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/Login" element={<LoginScreen />} />
       <Route path="/Signup" element={<SignupScreen />} />
+      {/* <Route path="/HomePage" element={<HomePage />} /> */}
     </Routes>
   );
 }
-/* 
-function App() {
+
+/* function App() {
   return (
     <Routes>
-      <Route path="/" element={<HomePage />} />
-    </Routes>
+      <Route path="/" element={<LoginScreen />} />
+      <Route path="/Signup" element={<SignupScreen />} />
+    </Routes >
   );
-} */
+}  */
 
 export default App;

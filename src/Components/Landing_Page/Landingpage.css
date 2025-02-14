@@ -1,3 +1,23 @@
+@font-face {
+    font-family: 'Coolfont';
+    src: url('../../Assets/Font/AmaticSC-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.body {
+    overflow-y: scroll;
+    scrollbar-width: none;
+    /* For Firefox */
+    -ms-overflow-style: none;
+    /* For Internet Explorer and Edge */
+}
+
+.body::-webkit-scrollbar {
+    display: none;
+    /* For Chrome, Safari, and Opera */
+}
+
 .header {
     display: flex;
     justify-content: space-between;
@@ -5,6 +25,10 @@
     padding: 20px;
     background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+h2 {
+    font-family: 'Coolfont';
 }
 
 .logo img {
@@ -67,7 +91,7 @@
 
 .demo-button {
     background-color: transparent;
-    color: #333;
+    color: #3a3a3a;
     border: 1px solid #333;
 }
 
@@ -85,7 +109,7 @@
     display: flex;
     align-items: center;
     padding: 80px;
-    background-color: #f2f2f2;
+    background-color: #ffffff;
 }
 
 .hero-content {
@@ -199,6 +223,7 @@
 .footer-section h3 {
     color: #333;
     margin-bottom: 10px;
+    font-family: 'Arial', sans-serif;
 }
 
 .footer-section ul {
@@ -216,7 +241,7 @@
 }
 
 .footer-bottom {
-    text-align: center;
+    text-align: left;
     padding-top: 20px;
     border-top: 1px solid #ddd;
     margin-top: 20px;
@@ -234,34 +259,10 @@
     justify-content: center;
 }
 
-.footer-legal li {
-    margin: 0 10px;
-}
-
-.footer-legal a {
-    color: #666;
-}
-
 .footer-section img {
     width: 20px;
     height: 20px;
     margin-right: 10px;
-}
-
-.how-it-works {
-    padding: 80px;
-    text-align: center;
-    background-color: #fff;
-}
-
-.how-it-works h2 {
-    margin-bottom: 40px;
-}
-
-.how-it-works-steps {
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
 }
 
 .step {
@@ -318,4 +319,8 @@
     left: 10px;
     border: 2px solid #fff;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.h3:hover {
+    color: #b71717;
 }
