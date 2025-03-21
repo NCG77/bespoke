@@ -5,22 +5,14 @@
     font-style: normal;
 }
 
-.body {
-    overflow-y: scroll;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-}
-
-.body::-webkit-scrollbar {
-    display: none;
-}
-
 .header {
+    position: sticky;
+    top: 0;
+    z-index: 1000;
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 20px;
-    background-color: #fff;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
@@ -106,7 +98,8 @@ h2 {
     display: flex;
     align-items: center;
     padding: 80px;
-    background-color: #ffffff;
+    background-color: yellow !important;
+    /* Debugging style */
 }
 
 .hero-content {

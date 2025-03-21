@@ -1,0 +1,97 @@
+@font-face {
+    font-family: 'Coolfont';
+    src: url('../../Assets/Font/AmaticSC-Regular.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f5f5f5;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.h1 {
+    font-family: 'Coolfont';
+}
+
+.signup-container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+}
+
+.signup-card {
+    background-color: #ffffff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    text-align: center;
+}
+
+.signup-card h1 {
+    font-size: 24px;
+    margin-bottom: 10px;
+    color: #333333;
+}
+
+.signup-card .subtext {
+    font-size: 14px;
+    color: #666666;
+    margin-bottom: 20px;
+}
+
+.signup-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.signup-form input {
+    padding: 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.signup-form input:focus {
+    border-color: #007bff;
+}
+
+.signup-form button {
+    padding: 10px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.signup-form button:hover {
+    background-color: #0056b3;
+}
+
+.login-prompt {
+    font-size: 14px;
+    color: #666666;
+    margin-top: 20px;
+}
+
+.login-prompt a {
+    color: #007bff;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.login-prompt a:hover {
+    color: #0056b3;
+}

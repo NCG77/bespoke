@@ -1,8 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react'; /* { useState } */
 import './Landingpage.css';
 import { useNavigate } from "react-router-dom";
-
-import Logo from '../../Assets/Logo.png';
 import HeroImage from '../../Assets/Main.png';
 import Feature1Image from '../../Assets/Analysis.png';
 import Feature2Image from '../../Assets/Manage.png';
@@ -10,11 +8,6 @@ import Feature3Image from '../../Assets/Main.png';
 
 const Landingpage = () => {
     const navigate = useNavigate();
-    const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
-    const toggleDropdown = () => {
-        setIsDropdownVisible(!isDropdownVisible);
-    };
 
     return (
         <div className="Body">
@@ -39,10 +32,6 @@ const Landingpage = () => {
                 </div>
             </section>
 
-            <section>
-                <br></br>
-                <br></br>
-            </section>
             <section className="features">
                 <div className="feature">
                     <img src={Feature1Image} alt="Voice Analysis" />

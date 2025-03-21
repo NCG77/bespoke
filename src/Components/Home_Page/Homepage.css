@@ -20,7 +20,6 @@ body {
 
 h2 {
     font-family: 'Coolfont';
-    height: 400px;
 }
 
 body.dark-mode {
@@ -42,8 +41,12 @@ body.dark-mode {
     transition: background 0.3s;
 }
 
+body.light-mode.recorder-container {
+    background: rgba(110, 109, 109, 0.1);
+}
+
 body.dark-mode .recorder-container {
-    background: rgba(20, 20, 20, 0.9);
+    background: rgba(38, 38, 38, 0.9);
 }
 
 .recorder {
