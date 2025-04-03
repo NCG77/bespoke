@@ -16,7 +16,7 @@ const Recorder: React.FC = () => {
     const analyserRef = useRef<AnalyserNode | null>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [isDarkMode, setIsDarkMode] = useState(true);
-    const [showNotification, setShowNotification] = useState(false);
+    const [showNotification, setShowNotification] = useState(true);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
     const recognitionRef = useRef<any>(null);
@@ -45,6 +45,7 @@ const Recorder: React.FC = () => {
                     };
                     mediaRecorderRef.current.onstop = async () => {
                         const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+                        console.log("Recorded Transcript:", transcript); // Log the transcript to the console
                         const generatedNotes = await generateNotes(transcript);
                         await sendEmailWithNotes(generatedNotes);
                     };
@@ -78,7 +79,9 @@ const Recorder: React.FC = () => {
 
                         recognitionRef.current.onend = () => {
                             console.log("Speech recognition ended.");
-                            recognitionRef.current.start();
+                            if (recognitionRef.current.state !== 'stopped' && isRecording) {
+                                recognitionRef.current.start();
+                            }
                         };
 
                         recognitionRef.current.start();
@@ -148,11 +151,13 @@ const Recorder: React.FC = () => {
         draw();
     };
 
+    // Notes Generation Function
     const generateNotes = async (transcript: string): Promise<string> => {
         const api = process.env.REACT_APP_API_KEY;
 
         if (api) {
             try {
+                console.log("HI from AI: " + transcript);
                 const context = "You are an expert note-taker. Summarize the following transcript into concise and coherent notes:";
 
                 const messages = [
@@ -186,7 +191,6 @@ const Recorder: React.FC = () => {
             return "API Key not found. Please check your environment variables.";
         }
     };
-
 
     const sendEmailWithNotes = async (notes: string): Promise<void> => {
         // Implement the email sending logic here
@@ -225,7 +229,7 @@ const Recorder: React.FC = () => {
                 </button>
             </div>
             <div className="bottom-left-buttons">
-                <button className="settings-button">
+                <button className="settings-button" onClick={() => console.log("Woopdi")}>
                     <SettingsIcon />
                 </button>
             </div>

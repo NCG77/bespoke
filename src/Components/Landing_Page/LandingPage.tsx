@@ -1,6 +1,8 @@
 import React from 'react'; /* { useState } */
 import './Landingpage.css';
 import { useNavigate } from "react-router-dom";
+
+/* import Logo from '../../Assets/Logo.png'; */
 import HeroImage from '../../Assets/Main.png';
 import Feature1Image from '../../Assets/Analysis.png';
 import Feature2Image from '../../Assets/Manage.png';
@@ -13,7 +15,7 @@ const Landingpage = () => {
         <div className="Body">
             <header className="header">
                 <div className="top-left-text">
-                    <h2>Bespoke</h2>
+                    <h1>Bespoke</h1>
                 </div>
                 <div className="cta">
                     <button className="demo-button" onClick={() => navigate("/Signup")}>Request a demo</button>
@@ -26,9 +28,6 @@ const Landingpage = () => {
                     <h1>Bespoke: Your AI-Powered Notes Companion</h1>
                     <h2>Revolutionizing Note-taking with intelligent voice analysis.</h2>
                     <button className="cta-button">Get Started</button>
-                </div>
-                <div className="hero-image">
-                    <img src={HeroImage} alt="Healthcare Hero" />
                 </div>
             </section>
 
