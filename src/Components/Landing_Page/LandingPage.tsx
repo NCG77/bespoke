@@ -2,7 +2,7 @@ import React from 'react'; /* { useState } */
 import './Landingpage.css';
 import { useNavigate } from "react-router-dom";
 
-/* import Logo from '../../Assets/Logo.png'; */
+import Logo from '../../Assets/Logo.svg';
 import HeroImage from '../../Assets/Main.png';
 import Feature1Image from '../../Assets/Analysis.png';
 import Feature2Image from '../../Assets/Manage.png';
@@ -24,12 +24,27 @@ const Landingpage = () => {
             </header>
 
             <section className="hero">
-                <div className="hero-content">
-                    <h1>Bespoke: Your AI-Powered Notes Companion</h1>
-                    <h2>Revolutionizing Note-taking with intelligent voice analysis.</h2>
-                    <button className="cta-button">Get Started</button>
+                <div className="hero-content"
+                    style={{
+                        backgroundImage: `url(${Logo})`,
+                        backgroundSize: 'contain',
+                        backgroundRepeat: 'no-repeat',
+                        backgroundPosition: 'center',
+                        width: '100%',
+                        height: 'auto',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        padding: '20px',
+                        boxSizing: 'border-box',
+                        textAlign: 'center',
+                    }}>
+                    <h1 style={{ fontSize: '2rem', margin: '10px 0' }}>Bespoke: Your AI-Powered Notes Companion</h1>
+                    <h2 style={{ fontSize: '1.5rem', margin: '10px 0' }}>Revolutionizing Note-taking with intelligent voice analysis.</h2>
+                    <button className="cta-button" style={{ padding: '10px 20px', fontSize: '1rem', marginTop: '20px' }}>Get Started</button>
                 </div>
-            </section>
+            </section >
 
             <section className="features">
                 <div className="feature">

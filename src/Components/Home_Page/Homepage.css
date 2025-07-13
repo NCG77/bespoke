@@ -201,3 +201,16 @@ body.dark-mode .settings-button svg {
     height: 100%;
     border-radius: 5px;
 }
+
+.audio-source-text {
+    font-family: 'Arial';
+    position: absolute;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: grey;
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 1000;
+}
