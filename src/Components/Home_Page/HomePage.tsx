@@ -157,6 +157,13 @@ const Recorder: React.FC = () => {
     };
 
     const sendEmailWithNotes = async (notes: string): Promise<void> => {
+        const email = localStorage.emailID;
+        if (!email) {
+            console.error("Email not found in localStorage.");
+            return;
+        }
+
+        
         console.log("Sending email with notes:", notes);
     };
 
@@ -164,13 +171,15 @@ const Recorder: React.FC = () => {
         <div className="recorder-container">
             <div className="top-left-text"><h2>Bespoke</h2></div>
 
+            <div className="top-centre">
+                {audioSourceError && <div className="audio-error-text">{audioSourceError}</div>}
+            </div>
+
             <div className="top-right-buttons">
                 <button className="dark-mode-button" onClick={() => setIsDarkMode(!isDarkMode)}>
                     {isDarkMode ? <SunIcon /> : <MoonIcon />}
                 </button>
             </div>
-
-            {audioSourceError && <div className="audio-error-text">{audioSourceError}</div>}
 
             <div className="recorder">
                 <div className="cassette">
