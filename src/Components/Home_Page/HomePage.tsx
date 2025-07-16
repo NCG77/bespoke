@@ -13,11 +13,20 @@ const Recorder: React.FC = () => {
     const [isDarkMode, setIsDarkMode] = useState(true);
     const [showNotification, setShowNotification] = useState(true);
     const [audioSourceError, setAudioSourceError] = useState("");
+    const [language, setLanguage] = useState('en-in'); 
+    const [showLanguagePopup, setShowLanguagePopup] = useState(false);
+    const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+    
     const discRef = useRef<HTMLDivElement>(null);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const mediaRecorderRef = useRef<MediaRecorder | null>(null);
     const audioChunksRef = useRef<Blob[]>([]);
     const mediaStreamRef = useRef<MediaStream | null>(null);
+
+    const languageOptions = [
+        { code: 'en-US', name: 'English' },
+        { code: 'hi-IN', name: 'Hindi' }
+    ];
 
     useEffect(() => {
         document.body.classList.toggle("dark-mode", isDarkMode);
@@ -50,9 +59,6 @@ const Recorder: React.FC = () => {
 
             mediaRecorderRef.current.onstop = async () => {
                 const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/webm' });
-                console.log("Audio Blob:", audioBlob);
-                console.log("Blob size:", audioBlob.size);
-                const audioUrl = URL.createObjectURL(audioBlob);
                 const transcription = await transcribeWithAssemblyAI(audioBlob);
 
                 if (!transcription || transcription === "Transcription failed." || transcription === "") {
@@ -99,17 +105,22 @@ const Recorder: React.FC = () => {
                     "Content-Type": "application/json",
                     Authorization: apiKey,
                 },
-                body: JSON.stringify({ audio_url: upload_url }),
+                body: JSON.stringify({ 
+                    audio_url: upload_url,
+                    language_code: language 
+                }),
             });
+            
             const { id } = await transcriptRes.json();
-
-            let completed = false;
             let transcriptText = "";
+            let completed = false;
+            
             while (!completed) {
                 const pollingRes = await fetch(`https://api.assemblyai.com/v2/transcript/${id}`, {
                     headers: { Authorization: apiKey },
                 });
                 const data = await pollingRes.json();
+                
                 if (data.status === "completed") {
                     completed = true;
                     transcriptText = data.text;
@@ -120,7 +131,6 @@ const Recorder: React.FC = () => {
                 }
             }
 
-            console.log("Transcription result:", transcriptText);
             return transcriptText;
         } catch (error) {
             console.error("AssemblyAI error:", error);
@@ -128,43 +138,11 @@ const Recorder: React.FC = () => {
         }
     };
 
-    const summarizeText = async (text: string): Promise<string> => {
-        const api = process.env.REACT_APP_API_KEY;
-        try {
-            const context = "You are an expert note-taker. Summarize the following transcript into concise and coherent notes:";
-            const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${api}`,
-                },
-                body: JSON.stringify({
-                    model: "llama3-8b-8192",
-                    messages: [
-                        { role: "system", content: context },
-                        { role: "user", content: text },
-                    ],
-                    temperature: 0.7,
-                }),
-            });
-
-            const data = await response.json();
-            return data.choices[0]?.message?.content || "No response from AI.";
-        } catch (error) {
-            console.error("Summarization error:", error);
-            return "Summarization failed.";
-        }
-    };
-
-    const sendEmailWithNotes = async (notes: string): Promise<void> => {
-        const email = localStorage.emailID;
-        if (!email) {
-            console.error("Email not found in localStorage.");
-            return;
-        }
-
-        
-        console.log("Sending email with notes:", notes);
+    const handleLanguageChange = (newLanguage: string) => {
+        setLanguage(newLanguage);
+        setShowLanguagePopup(true);
+        setTimeout(() => setShowLanguagePopup(false), 2000);
+        setIsSettingsOpen(false); 
     };
 
     return (
@@ -173,6 +151,11 @@ const Recorder: React.FC = () => {
 
             <div className="top-centre">
                 {audioSourceError && <div className="audio-error-text">{audioSourceError}</div>}
+                {showLanguagePopup && (
+                    <div className="language-popup">
+                        Language set to: {languageOptions.find(lang => lang.code === language)?.name}
+                    </div>
+                )}
             </div>
 
             <div className="top-right-buttons">
@@ -200,8 +183,31 @@ const Recorder: React.FC = () => {
                     {showNotification ? <BellIcon /> : <CrossBellIcon />}
                 </button>
             </div>
+
             <div className="bottom-left-buttons">
-                <button className="settings-button" onClick={() => console.log("Woopdi")}> <SettingsIcon /> </button>
+                <div className="settings-container">
+                    <button 
+                        className="settings-button" 
+                        onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+                    >
+                        <SettingsIcon />
+                    </button>
+
+                    {isSettingsOpen && (
+                        <div className="settings-dropdown">
+                            <h4>Language Settings</h4>
+                            {languageOptions.map((lang) => (
+                                <button
+                                    key={lang.code}
+                                    className={`language-option ${language === lang.code ? 'active' : ''}`}
+                                    onClick={() => handleLanguageChange(lang.code)}
+                                >
+                                    {lang.name}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </div>
     );
