@@ -147,7 +147,7 @@ const Recorder: React.FC = () => {
 
     return (
         <div className="recorder-container">
-            <div className="top-left-text"><h2>Bespoke</h2></div>
+            <div className="top-left-text" onClick={() => window.location.reload()}><h2>Bespoke</h2></div>
 
             <div className="top-centre">
                 {audioSourceError && <div className="audio-error-text">{audioSourceError}</div>}
