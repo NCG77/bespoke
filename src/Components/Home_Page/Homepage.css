@@ -32,9 +32,9 @@ body.dark-mode {
     justify-content: center;
     align-items: center;
     width: 100%;
-    max-width: 440px;
+    max-width: 420px;
     height: 150%;
-    background: rgba(214, 214, 214, 0.9);
+    background: rgba(238, 238, 238, 0.9);
     border-radius: 20px;
     padding: 20px;
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
@@ -62,7 +62,7 @@ body.dark-mode .recorder-container {
 .cassette {
     width: 250px;
     height: 100px;
-    background: linear-gradient(135deg, #e3e3e3, #ffffff);
+    background: linear-gradient(135deg, #cbcbcb, #f1f1f1);
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
     display: flex;
