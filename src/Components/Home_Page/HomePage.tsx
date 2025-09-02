@@ -10,6 +10,9 @@ import { ReactComponent as SettingsIcon } from "../../Assets/setting-5-svgrepo-c
 
 const Recorder: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
+  const [recordingTimeLeft, setRecordingTimeLeft] = useState(30 * 60); // in seconds
+  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const timerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showNotification, setShowNotification] = useState(true);
   const [audioSourceError, setAudioSourceError] = useState("");
@@ -17,11 +20,11 @@ const Recorder: React.FC = () => {
   const [showLanguagePopup, setShowLanguagePopup] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
-  const discRef = useRef<HTMLDivElement>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
-  const audioChunksRef = useRef<Blob[]>([]);
-  const mediaStreamRef = useRef<MediaStream | null>(null);
+  const discRef = useRef(null);
+  const canvasRef = useRef(null);
+  const mediaRecorderRef = useRef(null as MediaRecorder | null);
+  const audioChunksRef = useRef([]);
+  const mediaStreamRef = useRef(null as MediaStream | null);
 
   const languageOptions = [
     { code: "en-US", name: "English" },
@@ -34,13 +37,33 @@ const Recorder: React.FC = () => {
 
   useEffect(() => {
     if (isRecording) {
+      setRecordingTimeLeft(30 * 60); // reset timer
       startRecording();
+      // Start countdown interval
+      timerIntervalRef.current = setInterval(() => {
+        setRecordingTimeLeft((prev) => {
+          if (prev <= 1) {
+            setIsRecording(false);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+      // Auto-stop after 30 minutes
+      timerTimeoutRef.current = setTimeout(() => {
+        setIsRecording(false);
+      }, 30 * 60 * 1000);
     } else {
       stopRecording();
+      // Clean up timers
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+      if (timerTimeoutRef.current) clearTimeout(timerTimeoutRef.current);
     }
 
     return () => {
       stopRecording();
+      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
+      if (timerTimeoutRef.current) clearTimeout(timerTimeoutRef.current);
     };
   }, [isRecording]);
 
@@ -61,7 +84,10 @@ const Recorder: React.FC = () => {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: "audio/webm",
         });
+
+        console.log("Audio blob created:", audioBlob);
         const transcription = await transcribeWithAssemblyAI(audioBlob);
+        console.log("Transcription result:", transcription);
 
         if (
           !transcription ||
@@ -69,15 +95,10 @@ const Recorder: React.FC = () => {
           transcription === ""
         ) {
           console.log("No valid transcription received.");
-          if (showNotification)
-            await sendEmailWithNotes("No transcript was recorded.");
           return;
         }
 
-        const summary = await summarizeText(transcription);
-        if (showNotification) {
-          await sendEmailWithNotes(summary);
-        }
+        console.log("Processing transcription:", transcription);
       };
 
       mediaRecorderRef.current.start();
@@ -106,7 +127,19 @@ const Recorder: React.FC = () => {
         headers: { Authorization: apiKey },
         body: audioBlob,
       });
-      const { upload_url } = await uploadRes.json();
+
+      if (!uploadRes.ok) {
+        throw new Error(
+          `Upload failed: ${uploadRes.status} ${uploadRes.statusText}`
+        );
+      }
+
+      const uploadData = await uploadRes.json();
+      const { upload_url } = uploadData;
+
+      if (!upload_url) {
+        throw new Error("No upload URL received from AssemblyAI");
+      }
 
       const transcriptRes = await fetch(
         "https://api.assemblyai.com/v2/transcript",
@@ -188,6 +221,22 @@ const Recorder: React.FC = () => {
       </div>
 
       <div className="recorder">
+        {isRecording && (
+          <div
+            style={{
+              marginBottom: 10,
+              fontSize: 18,
+              fontWeight: 600,
+              color: isDarkMode ? "#fff" : "#333",
+            }}
+          >
+            Time left:{" "}
+            {Math.floor(recordingTimeLeft / 60)
+              .toString()
+              .padStart(2, "0")}
+            :{(recordingTimeLeft % 60).toString().padStart(2, "0")}
+          </div>
+        )}
         <div className="cassette">
           <canvas
             className="visualizer"
