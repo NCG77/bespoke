@@ -10,15 +10,16 @@ import { ReactComponent as SettingsIcon } from "../../Assets/setting-5-svgrepo-c
 
 const Recorder: React.FC = () => {
   const [isRecording, setIsRecording] = useState(false);
-  const [recordingTimeLeft, setRecordingTimeLeft] = useState(30 * 60); // in seconds
-  const timerIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const timerTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const [recordingTimeLeft, setRecordingTimeLeft] = useState(30 * 60);
+  const timerIntervalRef = useRef<number | null>(null);
+  const timerTimeoutRef = useRef<number | null>(null);
   const [isDarkMode, setIsDarkMode] = useState(true);
   const [showNotification, setShowNotification] = useState(true);
   const [audioSourceError, setAudioSourceError] = useState("");
   const [language, setLanguage] = useState("en-in");
   const [showLanguagePopup, setShowLanguagePopup] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [audioUrl, setAudioUrl] = useState<string | null>(null);
 
   const discRef = useRef(null);
   const canvasRef = useRef(null);
@@ -37,9 +38,8 @@ const Recorder: React.FC = () => {
 
   useEffect(() => {
     if (isRecording) {
-      setRecordingTimeLeft(30 * 60); // reset timer
+      setRecordingTimeLeft(30 * 60);
       startRecording();
-      // Start countdown interval
       timerIntervalRef.current = setInterval(() => {
         setRecordingTimeLeft((prev) => {
           if (prev <= 1) {
@@ -49,13 +49,11 @@ const Recorder: React.FC = () => {
           return prev - 1;
         });
       }, 1000);
-      // Auto-stop after 30 minutes
       timerTimeoutRef.current = setTimeout(() => {
         setIsRecording(false);
       }, 30 * 60 * 1000);
     } else {
       stopRecording();
-      // Clean up timers
       if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
       if (timerTimeoutRef.current) clearTimeout(timerTimeoutRef.current);
     }
@@ -72,7 +70,11 @@ const Recorder: React.FC = () => {
     audioChunksRef.current = [];
 
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      // Use getDisplayMedia to capture system audio (user must select a screen/tab and allow audio)
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true,
+      });
       mediaStreamRef.current = stream;
 
       mediaRecorderRef.current = new MediaRecorder(stream);
@@ -85,7 +87,12 @@ const Recorder: React.FC = () => {
           type: "audio/webm",
         });
 
+        // Create a URL for playback
+        const url = URL.createObjectURL(audioBlob);
+        setAudioUrl(url);
         console.log("Audio blob created:", audioBlob);
+        console.log("Audio URL for playback:", url);
+
         const transcription = await transcribeWithAssemblyAI(audioBlob);
         console.log("Transcription result:", transcription);
 
@@ -105,7 +112,7 @@ const Recorder: React.FC = () => {
     } catch (error) {
       console.error("Recording failed:", error);
       setAudioSourceError(
-        "Microphone access failed. Refresh and allow access."
+        "System audio access failed. Refresh and allow access."
       );
       setIsRecording(false);
     }
@@ -118,11 +125,12 @@ const Recorder: React.FC = () => {
   };
 
   const transcribeWithAssemblyAI = async (audioBlob: Blob): Promise<string> => {
+    // @ts-ignore
     const apiKey = process.env.REACT_APP_ASSEMBLYAI_API_KEY;
     if (!apiKey) return "AssemblyAI API key missing.";
 
     try {
-      const uploadRes = await fetch("https://api.assemblyai.com/v2/upload", {
+      const uploadRes = await fetch("wss://streaming.assemblyai.com/v3/ws", {
         method: "POST",
         headers: { Authorization: apiKey },
         body: audioBlob,
@@ -194,39 +202,22 @@ const Recorder: React.FC = () => {
   };
 
   return (
-    <div className="recorder-container">
-      <div className="top-left-text" onClick={() => window.location.reload()}>
-        <h2>Bespoke</h2>
-      </div>
-
-      <div className="top-centre">
-        {audioSourceError && (
-          <div className="audio-error-text">{audioSourceError}</div>
-        )}
-        {showLanguagePopup && (
-          <div className="language-popup">
-            Language set to:{" "}
-            {languageOptions.find((lang) => lang.code === language)?.name}
+    <div>
+      <div className="recorder">
+        {audioUrl && (
+          <div style={{ marginBottom: 10 }}>
+            <audio controls src={audioUrl} style={{ width: "100%" }} />
+            <div style={{ fontSize: 12, color: isDarkMode ? "#fff" : "#333" }}>
+              Playback of last recording
+            </div>
           </div>
         )}
-      </div>
-
-      <div className="top-right-buttons">
-        <button
-          className="dark-mode-button"
-          onClick={() => setIsDarkMode(!isDarkMode)}
-        >
-          {isDarkMode ? <SunIcon /> : <MoonIcon />}
-        </button>
-      </div>
-
-      <div className="recorder">
         {isRecording && (
           <div
             style={{
               marginBottom: 10,
-              fontSize: 18,
-              fontWeight: 600,
+              fontSize: "18px",
+              fontWeight: 600 as React.CSSProperties["fontWeight"],
               color: isDarkMode ? "#fff" : "#333",
             }}
           >
