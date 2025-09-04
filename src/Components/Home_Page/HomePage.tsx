@@ -49,148 +49,63 @@ const Recorder: React.FC = () => {
           return prev - 1;
         });
       }, 1000);
-      timerTimeoutRef.current = setTimeout(() => {
-        setIsRecording(false);
-      }, 30 * 60 * 1000);
     } else {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+      if (timerTimeoutRef.current) {
+        clearTimeout(timerTimeoutRef.current);
+        timerTimeoutRef.current = null;
+      }
       stopRecording();
-      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
-      if (timerTimeoutRef.current) clearTimeout(timerTimeoutRef.current);
     }
 
     return () => {
-      stopRecording();
-      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
-      if (timerTimeoutRef.current) clearTimeout(timerTimeoutRef.current);
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+      }
+      if (timerTimeoutRef.current) {
+        clearTimeout(timerTimeoutRef.current);
+      }
     };
   }, [isRecording]);
 
   const startRecording = async () => {
-    discRef.current?.classList.add("spin");
-    audioChunksRef.current = [];
-
     try {
-      // Use getDisplayMedia to capture system audio (user must select a screen/tab and allow audio)
-      const stream = await navigator.mediaDevices.getDisplayMedia({
-        video: true,
-        audio: true,
-      });
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       mediaStreamRef.current = stream;
-
-      mediaRecorderRef.current = new MediaRecorder(stream);
-      mediaRecorderRef.current.ondataavailable = (event) => {
-        audioChunksRef.current.push(event.data);
+      
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      
+      mediaRecorder.ondataavailable = (event) => {
+        if (event.data.size > 0) {
+          audioChunksRef.current.push(event.data);
+        }
       };
-
-      mediaRecorderRef.current.onstop = async () => {
-        const audioBlob = new Blob(audioChunksRef.current, {
-          type: "audio/webm",
-        });
-
-        // Create a URL for playback
+      
+      mediaRecorder.onstop = () => {
+        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
-        console.log("Audio blob created:", audioBlob);
-        console.log("Audio URL for playback:", url);
-
-        const transcription = await transcribeWithAssemblyAI(audioBlob);
-        console.log("Transcription result:", transcription);
-
-        if (
-          !transcription ||
-          transcription === "Transcription failed." ||
-          transcription === ""
-        ) {
-          console.log("No valid transcription received.");
-          return;
-        }
-
-        console.log("Processing transcription:", transcription);
+        audioChunksRef.current = [];
       };
-
-      mediaRecorderRef.current.start();
+      
+      mediaRecorder.start();
+      setAudioSourceError("");
     } catch (error) {
-      console.error("Recording failed:", error);
-      setAudioSourceError(
-        "System audio access failed. Refresh and allow access."
-      );
+      setAudioSourceError("Could not access microphone");
       setIsRecording(false);
     }
   };
 
   const stopRecording = () => {
-    discRef.current?.classList.remove("spin");
-    mediaRecorderRef.current?.stop();
-    mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
-  };
-
-  const transcribeWithAssemblyAI = async (audioBlob: Blob): Promise<string> => {
-    // @ts-ignore
-    const apiKey = process.env.REACT_APP_ASSEMBLYAI_API_KEY;
-    if (!apiKey) return "AssemblyAI API key missing.";
-
-    try {
-      const uploadRes = await fetch("wss://streaming.assemblyai.com/v3/ws", {
-        method: "POST",
-        headers: { Authorization: apiKey },
-        body: audioBlob,
-      });
-
-      if (!uploadRes.ok) {
-        throw new Error(
-          `Upload failed: ${uploadRes.status} ${uploadRes.statusText}`
-        );
-      }
-
-      const uploadData = await uploadRes.json();
-      const { upload_url } = uploadData;
-
-      if (!upload_url) {
-        throw new Error("No upload URL received from AssemblyAI");
-      }
-
-      const transcriptRes = await fetch(
-        "https://api.assemblyai.com/v2/transcript",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: apiKey,
-          },
-          body: JSON.stringify({
-            audio_url: upload_url,
-            language_code: language,
-          }),
-        }
-      );
-
-      const { id } = await transcriptRes.json();
-      let transcriptText = "";
-      let completed = false;
-
-      while (!completed) {
-        const pollingRes = await fetch(
-          `https://api.assemblyai.com/v2/transcript/${id}`,
-          {
-            headers: { Authorization: apiKey },
-          }
-        );
-        const data = await pollingRes.json();
-
-        if (data.status === "completed") {
-          completed = true;
-          transcriptText = data.text;
-        } else if (data.status === "error") {
-          throw new Error(data.error);
-        } else {
-          await new Promise((resolve) => setTimeout(resolve, 3000));
-        }
-      }
-
-      return transcriptText;
-    } catch (error) {
-      console.error("AssemblyAI error:", error);
-      return "Transcription failed.";
+    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+      mediaRecorderRef.current.stop();
+    }
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach(track => track.stop());
     }
   };
 
@@ -202,14 +117,48 @@ const Recorder: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="recorder-container">
+      <div
+        className="top-left-text"
+        onClick={() => window.location.reload()}
+        style={{ cursor: "pointer", userSelect: "none" }}
+      >
+        <h2>Bespoke</h2>
+      </div>
+
+      <div className="top-right-buttons">
+        <button
+          className="dark-mode-button"
+          onClick={() => setIsDarkMode(!isDarkMode)}
+        >
+          {isDarkMode ? <SunIcon /> : <MoonIcon />}
+        </button>
+      </div>
+
       <div className="recorder">
         {audioUrl && (
-          <div style={{ marginBottom: 10 }}>
-            <audio controls src={audioUrl} style={{ width: "100%" }} />
-            <div style={{ fontSize: 12, color: isDarkMode ? "#fff" : "#333" }}>
+          <div
+            style={{
+              marginBottom: 20,
+              padding: 16,
+              background: isDarkMode ? 'rgba(38,38,38,0.85)' : '#f7f7f7',
+              borderRadius: 12,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
+              border: isDarkMode ? '1px solid #444' : '1px solid #ddd',
+              width: '100%',
+              maxWidth: 350,
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 8,
+            }}
+          >
+            <audio controls src={audioUrl} style={{ width: '100%' }} />
+            <div style={{ fontSize: 13, color: isDarkMode ? '#fff' : '#333', fontWeight: 500 }}>
               Playback of last recording
             </div>
+          </div>
+        )}
           </div>
         )}
         {isRecording && (
