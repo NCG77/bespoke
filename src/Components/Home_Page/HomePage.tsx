@@ -72,40 +72,50 @@ const Recorder: React.FC = () => {
   }, [isRecording]);
 
   const startRecording = async () => {
+    discRef.current?.classList.add("spin");
+    audioChunksRef.current = [];
+
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const stream = await navigator.mediaDevices.getDisplayMedia({
+        video: true,
+        audio: true,
+      });
       mediaStreamRef.current = stream;
-      
-      const mediaRecorder = new MediaRecorder(stream);
-      mediaRecorderRef.current = mediaRecorder;
-      
-      mediaRecorder.ondataavailable = (event) => {
-        if (event.data.size > 0) {
-          audioChunksRef.current.push(event.data);
-        }
+
+      mediaRecorderRef.current = new MediaRecorder(stream);
+      mediaRecorderRef.current.ondataavailable = (event) => {
+        audioChunksRef.current.push(event.data);
       };
-      
-      mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: 'audio/wav' });
+
+      mediaRecorderRef.current.onstop = async () => {
+        const audioBlob = new Blob(audioChunksRef.current, {
+          type: "audio/webm",
+        });
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
         audioChunksRef.current = [];
       };
-      
-      mediaRecorder.start();
-      setAudioSourceError("");
+
+      mediaRecorderRef.current.start();
     } catch (error) {
-      setAudioSourceError("Could not access microphone");
+      console.error("Recording failed:", error);
+      setAudioSourceError(
+        "System audio access failed. Refresh and allow access."
+      );
       setIsRecording(false);
     }
   };
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current && mediaRecorderRef.current.state !== 'inactive') {
+    discRef.current?.classList.remove("spin");
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
       mediaRecorderRef.current.stop();
     }
     if (mediaStreamRef.current) {
-      mediaStreamRef.current.getTracks().forEach(track => track.stop());
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
     }
   };
 
@@ -116,121 +126,125 @@ const Recorder: React.FC = () => {
     setIsSettingsOpen(false);
   };
 
+  const handleTranscribe = async () => {
+    if (!audioUrl) return;
+
+    try {
+      const response = await fetch(audioUrl);
+      const audioBlob = await response.blob();
+
+      alert(
+        `Transcription started for audio in ${
+          language === "en-in" ? "English" : "Hindi"
+        }. This feature will be connected to your backend.`
+      );
+
+      console.log("Audio blob ready for transcription:", audioBlob);
+      console.log("Language:", language);
+    } catch (error) {
+      console.error("Transcription failed:", error);
+      alert("Transcription failed. Please try again.");
+    }
+  };
+
   return (
-    <div className="recorder-container">
-      <div
-        className="top-left-text"
-        onClick={() => window.location.reload()}
-        style={{ cursor: "pointer", userSelect: "none" }}
-      >
-        <h2>Bespoke</h2>
-      </div>
-
-      <div className="top-right-buttons">
-        <button
-          className="dark-mode-button"
-          onClick={() => setIsDarkMode(!isDarkMode)}
+    <div>
+      <div className="recorder-container">
+        <div
+          className="top-left-text clickable"
+          onClick={() => window.location.reload()}
         >
-          {isDarkMode ? <SunIcon /> : <MoonIcon />}
-        </button>
-      </div>
-
-      <div className="recorder">
-        {audioUrl && (
-          <div
-            style={{
-              marginBottom: 20,
-              padding: 16,
-              background: isDarkMode ? 'rgba(38,38,38,0.85)' : '#f7f7f7',
-              borderRadius: 12,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.08)',
-              border: isDarkMode ? '1px solid #444' : '1px solid #ddd',
-              width: '100%',
-              maxWidth: 350,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              gap: 8,
-            }}
-          >
-            <audio controls src={audioUrl} style={{ width: '100%' }} />
-            <div style={{ fontSize: 13, color: isDarkMode ? '#fff' : '#333', fontWeight: 500 }}>
-              Playback of last recording
-            </div>
-          </div>
-        )}
-          </div>
-        )}
-        {isRecording && (
-          <div
-            style={{
-              marginBottom: 10,
-              fontSize: "18px",
-              fontWeight: 600 as React.CSSProperties["fontWeight"],
-              color: isDarkMode ? "#fff" : "#333",
-            }}
-          >
-            Time left:{" "}
-            {Math.floor(recordingTimeLeft / 60)
-              .toString()
-              .padStart(2, "0")}
-            :{(recordingTimeLeft % 60).toString().padStart(2, "0")}
-          </div>
-        )}
-        <div className="cassette">
-          <canvas
-            className="visualizer"
-            ref={canvasRef}
-            width={150}
-            height={100}
-          />
+          <h2>Bespoke</h2>
         </div>
-        <div className="disc" ref={discRef}>
-          <div className="disc-inner"></div>
-        </div>
-        <button
-          className={`record-button ${isRecording ? "recording" : ""}`}
-          onClick={() => setIsRecording(!isRecording)}
-          disabled={!!audioSourceError}
-        >
-          {isRecording ? <PauseIcon /> : <PlayIcon />}
-        </button>
-      </div>
 
-      <div className="bottom-right-buttons">
-        <button
-          className="notification-button"
-          onClick={() => setShowNotification(!showNotification)}
-        >
-          {showNotification ? <BellIcon /> : <CrossBellIcon />}
-        </button>
-      </div>
-
-      <div className="bottom-left-buttons">
-        <div className="settings-container">
+        <div className="top-right-buttons">
           <button
-            className="settings-button"
-            onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+            className="dark-mode-button"
+            onClick={() => setIsDarkMode(!isDarkMode)}
           >
-            <SettingsIcon />
+            {isDarkMode ? <SunIcon /> : <MoonIcon />}
           </button>
+        </div>
 
-          {isSettingsOpen && (
-            <div className="settings-dropdown">
-              <h4>Language Settings</h4>
-              {languageOptions.map((lang) => (
-                <button
-                  key={lang.code}
-                  className={`language-option ${
-                    language === lang.code ? "active" : ""
-                  }`}
-                  onClick={() => handleLanguageChange(lang.code)}
-                >
-                  {lang.name}
-                </button>
-              ))}
+        <div className="recorder">
+          {audioUrl && (
+            <div className="audio-preview">
+              <audio controls src={audioUrl} />
+              <div className="audio-preview-label">
+                Playback of last recording
+              </div>
             </div>
           )}
+          {isRecording && (
+            <div className="recording-timer">
+              Time left:{" "}
+              {Math.floor(recordingTimeLeft / 60)
+                .toString()
+                .padStart(2, "0")}
+              :{(recordingTimeLeft % 60).toString().padStart(2, "0")}
+            </div>
+          )}
+          <div className="cassette">
+            <canvas
+              className="visualizer"
+              ref={canvasRef}
+              width={150}
+              height={100}
+            />
+          </div>
+          <div className="disc" ref={discRef}>
+            <div className="disc-inner"></div>
+          </div>
+          <button
+            className={`record-button ${isRecording ? "recording" : ""}`}
+            onClick={() => setIsRecording(!isRecording)}
+            disabled={!!audioSourceError}
+          >
+            {isRecording ? <PauseIcon /> : <PlayIcon />}
+          </button>
+
+          {audioUrl && !isRecording && (
+            <button className="submit-button" onClick={handleTranscribe}>
+              Transcribe Recording
+            </button>
+          )}
+        </div>
+
+        <div className="bottom-right-buttons">
+          <button
+            className="notification-button"
+            onClick={() => setShowNotification(!showNotification)}
+          >
+            {showNotification ? <BellIcon /> : <CrossBellIcon />}
+          </button>
+        </div>
+
+        <div className="bottom-left-buttons">
+          <div className="settings-container">
+            <button
+              className="settings-button"
+              onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+            >
+              <SettingsIcon />
+            </button>
+
+            {isSettingsOpen && (
+              <div className="settings-dropdown">
+                <h4>Language Settings</h4>
+                {languageOptions.map((lang) => (
+                  <button
+                    key={lang.code}
+                    className={`language-option ${
+                      language === lang.code ? "active" : ""
+                    }`}
+                    onClick={() => handleLanguageChange(lang.code)}
+                  >
+                    {lang.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

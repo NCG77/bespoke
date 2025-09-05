@@ -304,6 +304,101 @@ body.dark-mode .language-option.active {
 } 
 
 
+/* Clickable Logo */
+.top-left-text.clickable {
+    cursor: pointer;
+    user-select: none;
+}
+
+/* Recording Timer */
+.recording-timer {
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+}
+
+body.dark-mode .recording-timer {
+    color: #ffffff;
+}
+
+/* Modern Audio Preview */
+.audio-preview {
+    margin-bottom: 20px;
+    padding: 12px;
+    border-radius: 8px;
+    width: 100%;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255, 255, 255, 0.5);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    backdrop-filter: blur(10px);
+}
+
+body.dark-mode .audio-preview {
+    background: rgba(38, 38, 38, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.audio-preview audio {
+    width: 100%;
+    height: 32px;
+}
+
+.audio-preview-label {
+    font-size: 12px;
+    font-weight: 500;
+    opacity: 0.7;
+}
+
+body.dark-mode .audio-preview-label {
+    color: #ffffff;
+}
+
+/* Submit Button */
+.submit-button {
+    background: transparent;
+    color: #ff4d4d;
+    border: 2px solid #ff4d4d;
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    margin-top: 8px;
+    font-family: 'Classy Marisa', cursive;
+    letter-spacing: 0.5px;
+}
+
+.submit-button:hover {
+    background: #ff4d4d;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 77, 77, 0.3);
+}
+
+.submit-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    background: transparent;
+    color: #ff4d4d;
+}
+
+body.dark-mode .submit-button {
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+body.dark-mode .submit-button:hover {
+    background: #ff6b6b;
+    color: white;
+}
+
 @keyframes fadeInOut {
     0% {
         opacity: 0;
