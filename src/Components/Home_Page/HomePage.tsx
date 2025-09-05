@@ -49,19 +49,25 @@ const Recorder: React.FC = () => {
           return prev - 1;
         });
       }, 1000);
-      timerTimeoutRef.current = setTimeout(() => {
-        setIsRecording(false);
-      }, 30 * 60 * 1000);
     } else {
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+        timerIntervalRef.current = null;
+      }
+      if (timerTimeoutRef.current) {
+        clearTimeout(timerTimeoutRef.current);
+        timerTimeoutRef.current = null;
+      }
       stopRecording();
-      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
-      if (timerTimeoutRef.current) clearTimeout(timerTimeoutRef.current);
     }
 
     return () => {
-      stopRecording();
-      if (timerIntervalRef.current) clearInterval(timerIntervalRef.current);
-      if (timerTimeoutRef.current) clearTimeout(timerTimeoutRef.current);
+      if (timerIntervalRef.current) {
+        clearInterval(timerIntervalRef.current);
+      }
+      if (timerTimeoutRef.current) {
+        clearTimeout(timerTimeoutRef.current);
+      }
     };
   }, [isRecording]);
 
@@ -70,7 +76,6 @@ const Recorder: React.FC = () => {
     audioChunksRef.current = [];
 
     try {
-      // Use getDisplayMedia to capture system audio (user must select a screen/tab and allow audio)
       const stream = await navigator.mediaDevices.getDisplayMedia({
         video: true,
         audio: true,
@@ -86,26 +91,9 @@ const Recorder: React.FC = () => {
         const audioBlob = new Blob(audioChunksRef.current, {
           type: "audio/webm",
         });
-
-        // Create a URL for playback
         const url = URL.createObjectURL(audioBlob);
         setAudioUrl(url);
-        console.log("Audio blob created:", audioBlob);
-        console.log("Audio URL for playback:", url);
-
-        const transcription = await transcribeWithAssemblyAI(audioBlob);
-        console.log("Transcription result:", transcription);
-
-        if (
-          !transcription ||
-          transcription === "Transcription failed." ||
-          transcription === ""
-        ) {
-          console.log("No valid transcription received.");
-          return;
-        }
-
-        console.log("Processing transcription:", transcription);
+        audioChunksRef.current = [];
       };
 
       mediaRecorderRef.current.start();
@@ -120,77 +108,14 @@ const Recorder: React.FC = () => {
 
   const stopRecording = () => {
     discRef.current?.classList.remove("spin");
-    mediaRecorderRef.current?.stop();
-    mediaStreamRef.current?.getTracks().forEach((track) => track.stop());
-  };
-
-  const transcribeWithAssemblyAI = async (audioBlob: Blob): Promise<string> => {
-    // @ts-ignore
-    const apiKey = process.env.REACT_APP_ASSEMBLYAI_API_KEY;
-    if (!apiKey) return "AssemblyAI API key missing.";
-
-    try {
-      const uploadRes = await fetch("wss://streaming.assemblyai.com/v3/ws", {
-        method: "POST",
-        headers: { Authorization: apiKey },
-        body: audioBlob,
-      });
-
-      if (!uploadRes.ok) {
-        throw new Error(
-          `Upload failed: ${uploadRes.status} ${uploadRes.statusText}`
-        );
-      }
-
-      const uploadData = await uploadRes.json();
-      const { upload_url } = uploadData;
-
-      if (!upload_url) {
-        throw new Error("No upload URL received from AssemblyAI");
-      }
-
-      const transcriptRes = await fetch(
-        "https://api.assemblyai.com/v2/transcript",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: apiKey,
-          },
-          body: JSON.stringify({
-            audio_url: upload_url,
-            language_code: language,
-          }),
-        }
-      );
-
-      const { id } = await transcriptRes.json();
-      let transcriptText = "";
-      let completed = false;
-
-      while (!completed) {
-        const pollingRes = await fetch(
-          `https://api.assemblyai.com/v2/transcript/${id}`,
-          {
-            headers: { Authorization: apiKey },
-          }
-        );
-        const data = await pollingRes.json();
-
-        if (data.status === "completed") {
-          completed = true;
-          transcriptText = data.text;
-        } else if (data.status === "error") {
-          throw new Error(data.error);
-        } else {
-          await new Promise((resolve) => setTimeout(resolve, 3000));
-        }
-      }
-
-      return transcriptText;
-    } catch (error) {
-      console.error("AssemblyAI error:", error);
-      return "Transcription failed.";
+    if (
+      mediaRecorderRef.current &&
+      mediaRecorderRef.current.state !== "inactive"
+    ) {
+      mediaRecorderRef.current.stop();
+    }
+    if (mediaStreamRef.current) {
+      mediaStreamRef.current.getTracks().forEach((track) => track.stop());
     }
   };
 
@@ -201,87 +126,125 @@ const Recorder: React.FC = () => {
     setIsSettingsOpen(false);
   };
 
+  const handleTranscribe = async () => {
+    if (!audioUrl) return;
+
+    try {
+      const response = await fetch(audioUrl);
+      const audioBlob = await response.blob();
+
+      alert(
+        `Transcription started for audio in ${
+          language === "en-in" ? "English" : "Hindi"
+        }. This feature will be connected to your backend.`
+      );
+
+      console.log("Audio blob ready for transcription:", audioBlob);
+      console.log("Language:", language);
+    } catch (error) {
+      console.error("Transcription failed:", error);
+      alert("Transcription failed. Please try again.");
+    }
+  };
+
   return (
     <div>
-      <div className="recorder">
-        {audioUrl && (
-          <div style={{ marginBottom: 10 }}>
-            <audio controls src={audioUrl} style={{ width: "100%" }} />
-            <div style={{ fontSize: 12, color: isDarkMode ? "#fff" : "#333" }}>
-              Playback of last recording
-            </div>
-          </div>
-        )}
-        {isRecording && (
-          <div
-            style={{
-              marginBottom: 10,
-              fontSize: "18px",
-              fontWeight: 600 as React.CSSProperties["fontWeight"],
-              color: isDarkMode ? "#fff" : "#333",
-            }}
-          >
-            Time left:{" "}
-            {Math.floor(recordingTimeLeft / 60)
-              .toString()
-              .padStart(2, "0")}
-            :{(recordingTimeLeft % 60).toString().padStart(2, "0")}
-          </div>
-        )}
-        <div className="cassette">
-          <canvas
-            className="visualizer"
-            ref={canvasRef}
-            width={150}
-            height={100}
-          />
-        </div>
-        <div className="disc" ref={discRef}>
-          <div className="disc-inner"></div>
-        </div>
-        <button
-          className={`record-button ${isRecording ? "recording" : ""}`}
-          onClick={() => setIsRecording(!isRecording)}
-          disabled={!!audioSourceError}
+      <div className="recorder-container">
+        <div
+          className="top-left-text clickable"
+          onClick={() => window.location.reload()}
         >
-          {isRecording ? <PauseIcon /> : <PlayIcon />}
-        </button>
-      </div>
+          <h2>Bespoke</h2>
+        </div>
 
-      <div className="bottom-right-buttons">
-        <button
-          className="notification-button"
-          onClick={() => setShowNotification(!showNotification)}
-        >
-          {showNotification ? <BellIcon /> : <CrossBellIcon />}
-        </button>
-      </div>
-
-      <div className="bottom-left-buttons">
-        <div className="settings-container">
+        <div className="top-right-buttons">
           <button
-            className="settings-button"
-            onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+            className="dark-mode-button"
+            onClick={() => setIsDarkMode(!isDarkMode)}
           >
-            <SettingsIcon />
+            {isDarkMode ? <SunIcon /> : <MoonIcon />}
           </button>
+        </div>
 
-          {isSettingsOpen && (
-            <div className="settings-dropdown">
-              <h4>Language Settings</h4>
-              {languageOptions.map((lang) => (
-                <button
-                  key={lang.code}
-                  className={`language-option ${
-                    language === lang.code ? "active" : ""
-                  }`}
-                  onClick={() => handleLanguageChange(lang.code)}
-                >
-                  {lang.name}
-                </button>
-              ))}
+        <div className="recorder">
+          {audioUrl && (
+            <div className="audio-preview">
+              <audio controls src={audioUrl} />
+              <div className="audio-preview-label">
+                Playback of last recording
+              </div>
             </div>
           )}
+          {isRecording && (
+            <div className="recording-timer">
+              Time left:{" "}
+              {Math.floor(recordingTimeLeft / 60)
+                .toString()
+                .padStart(2, "0")}
+              :{(recordingTimeLeft % 60).toString().padStart(2, "0")}
+            </div>
+          )}
+          <div className="cassette">
+            <canvas
+              className="visualizer"
+              ref={canvasRef}
+              width={150}
+              height={100}
+            />
+          </div>
+          <div className="disc" ref={discRef}>
+            <div className="disc-inner"></div>
+          </div>
+          <button
+            className={`record-button ${isRecording ? "recording" : ""}`}
+            onClick={() => setIsRecording(!isRecording)}
+            disabled={!!audioSourceError}
+          >
+            {isRecording ? <PauseIcon /> : <PlayIcon />}
+          </button>
+
+          {audioUrl && !isRecording && (
+            <button className="submit-button" onClick={handleTranscribe}>
+              Transcribe Recording
+            </button>
+          )}
+        </div>
+
+        <div className="bottom-right-buttons">
+          <button
+            className="notification-button"
+            onClick={() => setShowNotification(!showNotification)}
+          >
+            {showNotification ? <BellIcon /> : <CrossBellIcon />}
+          </button>
+        </div>
+
+        <div className="bottom-left-buttons">
+          <div className="settings-container">
+            <button
+              className="settings-button"
+              onClick={() => setIsSettingsOpen(!isSettingsOpen)}
+            >
+              <SettingsIcon />
+            </button>
+
+            {isSettingsOpen && (
+              <div className="settings-dropdown">
+                <h4>Language Settings</h4>
+                {languageOptions.map((lang) => (
+                  <button
+                    key={lang.code}
+                    className={`language-option ${
+                      language === lang.code ? "active" : ""
+                    }`}
+                    onClick={() => handleLanguageChange(lang.code)}
+                  >
+                    {lang.name}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>

@@ -22,6 +22,14 @@
 - AssemblyAI API key
 - AI API key
 
+## Browser Requirements & Limitations
+
+- For system audio recording, use **Google Chrome** or **Microsoft Edge**.
+- On Chrome/Edge, you must select a tab or entire screen and check "Share audio" in the browser dialog.
+- **Firefox and Safari do NOT support system audio recording via getDisplayMedia.**
+- On macOS, system audio capture is not supported by browsers due to OS restrictions.
+- If you do not see the "Share audio" option, switch to Chrome/Edge and try again.
+
 ### Installation
 
 1. **Clone the repository**
