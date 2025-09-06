@@ -20,6 +20,9 @@ const Recorder: React.FC = () => {
   const [showLanguagePopup, setShowLanguagePopup] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const [audioUrl, setAudioUrl] = useState<string | null>(null);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [transcriptionResult, setTranscriptionResult] = useState<string>("");
+  const [showTranscription, setShowTranscription] = useState(false);
 
   const discRef = useRef(null);
   const canvasRef = useRef(null);
@@ -129,21 +132,112 @@ const Recorder: React.FC = () => {
   const handleTranscribe = async () => {
     if (!audioUrl) return;
 
+    setIsTranscribing(true);
+    setTranscriptionResult("");
+
     try {
       const response = await fetch(audioUrl);
       const audioBlob = await response.blob();
+      const apiKey = process.env.REACT_APP_ASSEMBLYAI_API_KEY;
 
-      alert(
-        `Transcription started for audio in ${
-          language === "en-in" ? "English" : "Hindi"
-        }. This feature will be connected to your backend.`
+      if (!apiKey || apiKey === "YOUR_ASSEMBLYAI_API_KEY") {
+        alert(
+          "Please replace 'YOUR_ASSEMBLYAI_API_KEY' with your actual AssemblyAI API key in the code"
+        );
+        return;
+      }
+
+      console.log("Starting upload...");
+      console.log("Audio blob size:", audioBlob.size, "bytes");
+      console.log("Audio blob type:", audioBlob.type);
+
+      const uploadResponse = await fetch(
+        "https://api.assemblyai.com/v2/upload",
+        {
+          method: "POST",
+          headers: {
+            authorization: apiKey,
+            "content-type": "application/octet-stream",
+          },
+          body: audioBlob,
+        }
       );
 
-      console.log("Audio blob ready for transcription:", audioBlob);
-      console.log("Language:", language);
-    } catch (error) {
+      console.log("Upload response status:", uploadResponse.status);
+
+      if (!uploadResponse.ok) {
+        const errorText = await uploadResponse.text();
+        console.error("Upload error:", errorText);
+        throw new Error(
+          `Upload failed: ${uploadResponse.status} - ${errorText}`
+        );
+      }
+
+      const uploadData = await uploadResponse.json();
+      const uploadedAudioUrl = uploadData.upload_url;
+
+      // Step 2: Request transcription
+      const transcriptResponse = await fetch(
+        "https://api.assemblyai.com/v2/transcript",
+        {
+          method: "POST",
+          headers: {
+            authorization: apiKey,
+            "content-type": "application/json",
+          },
+          body: JSON.stringify({
+            audio_url: uploadedAudioUrl,
+            language_code: language, // Uses the selected language
+            punctuate: true,
+            format_text: true,
+          }),
+        }
+      );
+
+      if (!transcriptResponse.ok) {
+        throw new Error("Failed to start transcription");
+      }
+
+      const transcriptData = await transcriptResponse.json();
+      const transcriptId = transcriptData.id;
+
+      // Remove this comment and test the API call
+      console.log("Transcription started with ID:", transcriptId);
+
+      // Step 3: Poll for transcription completion
+      const pollTranscription = async (): Promise<string> => {
+        const statusResponse = await fetch(
+          `https://api.assemblyai.com/v2/transcript/${transcriptId}`,
+          {
+            headers: {
+              authorization: apiKey,
+            },
+          }
+        );
+
+        const statusData = await statusResponse.json();
+
+        if (statusData.status === "completed") {
+          return statusData.text;
+        } else if (statusData.status === "error") {
+          throw new Error(statusData.error);
+        } else {
+          // Still processing, wait and try again
+          await new Promise((resolve) => setTimeout(resolve, 3000));
+          return pollTranscription();
+        }
+      };
+
+      const transcriptionText = await pollTranscription();
+      console.log("Transcription completed successfully:", transcriptionText);
+      setTranscriptionResult(transcriptionText);
+      setShowTranscription(true);
+    } catch (error: any) {
       console.error("Transcription failed:", error);
-      alert("Transcription failed. Please try again.");
+      const errorMessage = error.message || "Unknown error occurred";
+      alert(`Transcription failed: ${errorMessage}`);
+    } finally {
+      setIsTranscribing(false);
     }
   };
 
@@ -204,9 +298,26 @@ const Recorder: React.FC = () => {
           </button>
 
           {audioUrl && !isRecording && (
-            <button className="submit-button" onClick={handleTranscribe}>
-              Transcribe Recording
+            <button
+              className="submit-button"
+              onClick={handleTranscribe}
+              disabled={isTranscribing}
+            >
+              {isTranscribing ? "Transcribing..." : "Transcribe Recording"}
             </button>
+          )}
+
+          {showTranscription && transcriptionResult && (
+            <div className="transcription-result">
+              <h4>Transcription Result:</h4>
+              <p>{transcriptionResult}</p>
+              <button
+                className="close-transcription"
+                onClick={() => setShowTranscription(false)}
+              >
+                ✕
+              </button>
+            </div>
           )}
         </div>
 
