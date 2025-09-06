@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import "./homepage.css";
+import "./Homepage.css";
 import { ReactComponent as PlayIcon } from "../../Assets/play-button-svgrepo-com.svg";
 import { ReactComponent as PauseIcon } from "../../Assets/stop-button-svgrepo-com.svg";
 import { ReactComponent as SunIcon } from "../../Assets/light-svgrepo-com.svg";
