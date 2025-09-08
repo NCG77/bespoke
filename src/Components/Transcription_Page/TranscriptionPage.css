@@ -1,0 +1,265 @@
+@font-face {
+    font-family: 'Coolfont';
+    src: url('../../Assets/Font/AmaticSC-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+.transcription-page {
+    min-height: 100vh;
+    background-color: #f4f4f4;
+    color: #333;
+    font-family: 'Classy Marisa', sans-serif;
+    transition: background-color 0.4s ease, color 0.4s ease;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+body.dark-mode .transcription-page {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+.transcription-container {
+    width: 100%;
+    max-width: 800px;
+    background: rgba(238, 238, 238, 0.9);
+    border-radius: 20px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transition: background 0.3s;
+}
+
+body.dark-mode .transcription-container {
+    background: rgba(38, 38, 38, 0.9);
+}
+
+/* Header Styles */
+.transcription-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.back-button {
+    background: none;
+    border: 2px solid #ff4d4d;
+    color: #ff4d4d;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: 'Classy Marisa', cursive;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.back-button:hover {
+    background: #ff4d4d;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 77, 77, 0.3);
+}
+
+body.dark-mode .back-button {
+    border-color: #ff6b6b;
+    color: #ff6b6b;
+}
+
+body.dark-mode .back-button:hover {
+    background: #ff6b6b;
+    color: white;
+}
+
+.header-center {
+    text-align: center;
+    flex: 1;
+}
+
+.header-center h1 {
+    font-family: 'Coolfont';
+    margin: 0;
+    font-size: 36px;
+    color: #333;
+}
+
+body.dark-mode .header-center h1 {
+    color: #ffffff;
+}
+
+.subtitle {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+    opacity: 0.7;
+    font-family: 'Classy Marisa', cursive;
+}
+
+.dark-mode-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 24px;
+    padding: 8px;
+    border-radius: 50%;
+    transition: transform 0.2s ease;
+}
+
+.dark-mode-toggle:hover {
+    transform: scale(1.1);
+}
+
+/* Content Styles */
+.transcription-content {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.transcription-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.language-badge {
+    background: rgba(255, 77, 77, 0.1);
+    color: #ff4d4d;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    font-family: 'Classy Marisa', cursive;
+}
+
+body.dark-mode .language-badge {
+    background: rgba(255, 107, 107, 0.15);
+    color: #ff6b6b;
+}
+
+.word-count {
+    font-size: 12px;
+    opacity: 0.6;
+    font-family: 'Classy Marisa', cursive;
+}
+
+.transcription-text-container {
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    padding: 25px;
+    min-height: 300px;
+    backdrop-filter: blur(10px);
+}
+
+body.dark-mode .transcription-text-container {
+    background: rgba(50, 50, 50, 0.6);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.transcription-text {
+    font-size: 16px;
+    line-height: 1.8;
+    color: #333;
+    font-family: 'Classy Marisa', cursive;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+}
+
+body.dark-mode .transcription-text {
+    color: #e0e0e0;
+}
+
+/* Action Buttons */
+.transcription-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.copy-button,
+.download-button {
+    background: transparent;
+    color: #ff4d4d;
+    border: 2px solid #ff4d4d;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Classy Marisa', cursive;
+    letter-spacing: 0.5px;
+}
+
+.copy-button:hover,
+.download-button:hover {
+    background: #ff4d4d;
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 8px rgba(255, 77, 77, 0.3);
+}
+
+body.dark-mode .copy-button,
+body.dark-mode .download-button {
+    color: #ff6b6b;
+    border-color: #ff6b6b;
+}
+
+body.dark-mode .copy-button:hover,
+body.dark-mode .download-button:hover {
+    background: #ff6b6b;
+    color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .transcription-page {
+        padding: 15px;
+    }
+    
+    .transcription-container {
+        padding: 20px;
+    }
+    
+    .transcription-header {
+        flex-direction: column;
+        text-align: center;
+        gap: 20px;
+    }
+    
+    .header-center h1 {
+        font-size: 28px;
+    }
+    
+    .transcription-text-container {
+        padding: 20px;
+        min-height: 250px;
+    }
+    
+    .transcription-text {
+        font-size: 15px;
+        line-height: 1.7;
+    }
+    
+    .transcription-actions {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .copy-button,
+    .download-button {
+        width: 100%;
+        max-width: 200px;
+    }
+}
