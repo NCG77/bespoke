@@ -10,7 +10,8 @@ function App() {
   return (
 
     <Routes>
-      <Route path="/" element={<TranscriptionPage />} />
+      <Route path="/" element={<HomePage />} />
+      <Route path="/Transcribe" element={<TranscriptionPage />} />
     </Routes>
   );
 

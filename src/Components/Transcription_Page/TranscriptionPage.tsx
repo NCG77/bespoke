@@ -1,4 +1,3 @@
-// TranscriptionPage.js
 import React, { useState } from "react";
 import {
   Sun,
@@ -25,9 +24,6 @@ const TranscriptionPage = ({
   const languageNames = {
     en: "English",
     hi: "Hindi",
-    es: "Spanish",
-    fr: "French",
-    de: "German",
   };
 
   const safeText =
@@ -62,7 +58,6 @@ const TranscriptionPage = ({
 
   return (
     <div className={`transcription-page ${themeClass}`}>
-      {/* Header */}
       <div className={`transcription-header ${themeClass}`}>
         <div className="header-container">
           <div className="header-content">
@@ -88,9 +83,7 @@ const TranscriptionPage = ({
         </div>
       </div>
 
-      {/* Main Content */}
       <div className="main-content">
-        {/* Stats Bar */}
         <div className={`stats-bar ${themeClass}`}>
           <div className="stats-content">
             <div className="stats-left">
@@ -140,7 +133,6 @@ const TranscriptionPage = ({
           </div>
         </div>
 
-        {/* Transcription Content */}
         <div className={`content-card ${themeClass}`}>
           <div className={`content-header ${themeClass}`}>
             <h2 className={`content-title ${themeClass}`}>Transcription</h2>
