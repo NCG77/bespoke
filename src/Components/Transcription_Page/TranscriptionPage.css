@@ -53,7 +53,7 @@
     border: none;
     cursor: pointer;
     background: transparent;
-    min-height: 44px; /* Touch target size */
+    min-height: 44px; 
 }
 
 .back-button.light {
@@ -113,14 +113,13 @@
     color: #9ca3af;
 }
 
-/* Dark mode toggle */
 .dark-mode-toggle {
     padding: 0.5rem;
     border-radius: 0.5rem;
     transition: all 0.2s ease;
     border: none;
     cursor: pointer;
-    min-height: 44px; /* Touch target size */
+    min-height: 44px; 
     min-width: 44px;
 }
 
@@ -142,14 +141,12 @@
     background: rgba(55, 65, 81, 0.5);
 }
 
-/* Main content */
 .main-content {
     max-width: 56rem;
     margin: 0 auto;
     padding: 2rem 1.5rem;
 }
 
-/* Stats bar */
 .stats-bar {
     margin-bottom: 2rem;
     padding: 1rem;
@@ -221,7 +218,6 @@
     color: #d1d5db;
 }
 
-/* Action buttons */
 .action-buttons {
     display: flex;
     align-items: center;
@@ -240,7 +236,7 @@
     transition: all 0.2s ease;
     border-width: 1px;
     cursor: pointer;
-    min-height: 44px; /* Touch target size */
+    min-height: 44px; 
     white-space: nowrap;
 }
 
@@ -303,7 +299,6 @@
     background: rgba(30, 64, 175, 0.3);
 }
 
-/* Content card */
 .content-card {
     border-radius: 0.75rem;
     border-width: 1px;
@@ -368,7 +363,6 @@
     color: #e5e7eb;
 }
 
-/* Empty state */
 .empty-state {
     text-align: center;
     padding: 3rem 0;
@@ -421,7 +415,6 @@
     color: #9ca3af;
 }
 
-/* Icon styles */
 .icon-blue.light {
     color: #2563eb;
 }
@@ -446,7 +439,6 @@
     color: #a855f7;
 }
 
-/* Responsive design */
 @media (max-width: 640px) {
     .header-container {
         padding: 0.75rem 1rem;
@@ -567,12 +559,11 @@
     }
 }
 
-/* Touch device optimizations */
 @media (hover: none) and (pointer: coarse) {
     .back-button,
     .dark-mode-toggle,
     .action-button {
-        min-height: 48px; /* Larger touch targets */
+        min-height: 48px; 
     }
 
     .action-button {
