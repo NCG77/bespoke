@@ -24,12 +24,14 @@ const Recorder = () => {
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [transcriptionResult, setTranscriptionResult] = useState("");
   const [showTranscription, setShowTranscription] = useState(false);
+  const [audioDuration, setAudioDuration] = useState(0);
 
   const discRef = useRef(null);
   const canvasRef = useRef(null);
   const mediaRecorderRef = useRef(null as MediaRecorder | null);
   const audioChunksRef = useRef([]);
   const mediaStreamRef = useRef(null as MediaStream | null);
+  const audioRef = useRef<HTMLAudioElement>(null);
 
   const languageOptions = [
     { code: "en", name: "English" },
@@ -74,6 +76,12 @@ const Recorder = () => {
       }
     };
   }, [isRecording]);
+
+  const handleAudioLoad = () => {
+    if (audioRef.current) {
+      setAudioDuration(audioRef.current.duration || 0);
+    }
+  };
 
   const startRecording = async () => {
     discRef.current?.classList.add("spin");
@@ -268,7 +276,12 @@ const Recorder = () => {
           <div className="recorder">
             {audioUrl && (
               <div className="audio-preview">
-                <audio controls src={audioUrl} />
+                <audio
+                  ref={audioRef}
+                  controls
+                  src={audioUrl}
+                  onLoadedMetadata={handleAudioLoad}
+                />
                 <div className="audio-preview-label">
                   Playback of last recording
                 </div>
@@ -306,7 +319,7 @@ const Recorder = () => {
               <button
                 className="submit-button"
                 onClick={handleTranscribe}
-                disabled={isTranscribing}
+                disabled={isTranscribing || audioDuration === 0}
               >
                 {isTranscribing ? "Transcribing..." : "Transcribe Recording"}
               </button>

@@ -70,7 +70,7 @@ const SignupScreen = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       window.alert(`Signup Successful! Welcome, ${user.email}`);
-      navigate("/login");
+      navigate("/");
     } catch (error) {
       window.alert("Google Signup Failed: " + error.message);
     } finally {
@@ -83,9 +83,6 @@ const SignupScreen = () => {
       <div className="signup-card">
         <h1>Bespoke</h1>
         <h2>Create an account</h2>
-        <p className="subtext">
-          A Bespoke account allows you to receive notes directly mailed to you.
-        </p>
         <form className="signup-form" onSubmit={onSignupPressed}>
           <input
             type="text"
@@ -134,7 +131,7 @@ const SignupScreen = () => {
           Sign up with Google
         </button>
         <p className="login-prompt">
-          Already have an account? <a href="/login">Sign in</a>
+          Already have an account? <a href="/">Sign in</a>
         </p>
       </div>
     </div>

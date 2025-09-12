@@ -71,11 +71,11 @@ const LoginScreen = () => {
   };
 
   return (
-    <div className="signup-container">
-      <div className="signup-card">
+    <div className="login-container">
+      <div className="login-card">
         <h1>Bespoke</h1>
         <h2>Sign in to your account</h2>
-        <form className="signup-form" onSubmit={onLoginPressed}>
+        <form className="login-form" onSubmit={onLoginPressed}>
           <input
             type="email"
             placeholder="Email"
@@ -101,16 +101,6 @@ const LoginScreen = () => {
           className="google-signup-button"
           onClick={onGoogleLogin}
           disabled={loading}
-          style={{
-            marginTop: 12,
-            background: "#fff",
-            color: "#333",
-            border: "1px solid #ddd",
-            padding: "10px",
-            borderRadius: "5px",
-            fontWeight: 500,
-            cursor: "pointer",
-          }}
         >
           Sign in with Google
         </button>

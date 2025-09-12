@@ -1,12 +1,11 @@
 # Bespoke
 
-**Bespoke** is an intelligent voice recording and note-taking application that automatically transcribes your audio recordings and creates summarized notes. Perfect for meetings, lectures, interviews, or personal voice memos.
+**Bespoke** is an intelligent voice recording and note-taking application that automatically transcribes your audio recordings and creates Textual form of the audio for further processing. Perfect for meetings, lectures or interviews. I made it as usually while discussing ideas and thoughts with friends or colleagues, I miss out on some important points or people miss out on joining the meetings or are late. With Bespoke, i can focus on the conversation while it captures everything for me and i can share the transcribe after the meeting in groups, make notes, give contexts to ai agents for further processing.
 
 ## Features
 
 - **Voice Recording**: High-quality audio recording with visual feedback
 - **AI Transcription**: Powered by AssemblyAI for accurate speech-to-text conversion
-- **Smart Summarization**: AI-powered note generation using Groq's LLaMA model
 - **Multi-language Support**: Supports English and Hindi transcription
 - **Dark/Light Mode**: Toggle between dark and light themes
 - **Email Integration**: Automatically send notes to your registered email
@@ -20,7 +19,6 @@
 - npm or yarn
 - Firebase account
 - AssemblyAI API key
-- AI API key
 
 ## Browser Requirements & Limitations
 
@@ -73,7 +71,6 @@
 - **Frontend**: React 19, TypeScript, CSS3
 - **Authentication**: Firebase Auth
 - **Speech-to-Text**: AssemblyAI API
-- **AI Summarization**: Groq API (LLaMA 3)
 - **Routing**: React Router DOM
 - **Icons**: Custom SVG components
 - **Animations**: CSS animations and transitions
@@ -82,11 +79,8 @@
 
 1. **Sign Up/Login**: Create an account or log in with existing credentials
 2. **Record Audio**: Click the record button to start capturing audio
-3. **Automatic Processing**: 
-   - Audio is automatically uploaded to AssemblyAI for transcription
-   - Transcript is sent to Groq's AI for intelligent summarization
-4. **Receive Notes**: Summarized notes are sent to your registered email (if notifications are enabled)
-5. **Language Support**: Choose between English and Hindi for transcription
+3. **Automatic Processing**: Audio is automatically uploaded to AssemblyAI for transcription
+4. **Language Support**: Choose between English and Hindi for transcription
 
 ## Configuration
 
@@ -98,10 +92,6 @@
 ### Theme Toggle
 - Use the sun/moon icon to switch between light and dark modes
 - Theme preference persists across sessions
-
-### Notifications
-- Use the bell icon to toggle email notifications
-- When enabled, summarized notes are automatically sent to your email
 
 ## Contributing
 

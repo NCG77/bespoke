@@ -20,13 +20,13 @@ body {
     font-family: 'Coolfont';
 }
 
-.signup-container {
+.signup-container, .login-container {
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     padding: 20px;
 }
 
-.signup-card {
+.signup-card, .login-card {
     background-color: #ffffff;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
@@ -34,25 +34,25 @@ body {
     text-align: center;
 }
 
-.signup-card h1 {
+.signup-card h1, .login-card h1 {
     font-size: 24px;
     margin-bottom: 10px;
     color: #333333;
 }
 
-.signup-card .subtext {
+.signup-card .subtext, .login-card .subtext {
     font-size: 14px;
     color: #666666;
     margin-bottom: 20px;
 }
 
-.signup-form {
+.signup-form, .login-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-.signup-form input {
+.signup-form input, .login-form input {
     padding: 10px;
     border: 1px solid #dddddd;
     border-radius: 5px;
@@ -61,11 +61,11 @@ body {
     transition: border-color 0.3s ease;
 }
 
-.signup-form input:focus {
+.signup-form input:focus, .login-form input:focus {
     border-color: #007bff;
 }
 
-.signup-form button {
+.signup-form button, .login-form button {
     padding: 10px;
     background-color: #007bff;
     color: #ffffff;
@@ -94,4 +94,37 @@ body {
 
 .login-prompt a:hover {
     color: #0056b3;
+}
+
+.google-signup-button {
+    margin-top: 12px;
+    background: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+    font-weight: 500;
+    cursor: pointer;
+    font-size: 15px;
+    transition: background 0.2s, color 0.2s;
+    display: block;
+    width: 100%;
+}
+
+.google-signup-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.google-signup-button:hover {
+    background: #f5f5f5;
+    color: #007bff;
+    border-color: #007bff;
+}
+
+.error-text {
+    color: #ff4d4d;
+    font-size: 13px;
+    margin: 0 0 4px 0;
+    text-align: left;
 }
