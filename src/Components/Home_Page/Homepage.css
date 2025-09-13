@@ -303,14 +303,11 @@ body.dark-mode .language-option.active {
     top: 20px;
 } 
 
-
-/* Clickable Logo */
 .top-left-text.clickable {
     cursor: pointer;
     user-select: none;
 }
 
-/* Recording Timer */
 .recording-timer {
     margin-bottom: 10px;
     font-size: 18px;
@@ -322,7 +319,6 @@ body.dark-mode .recording-timer {
     color: #ffffff;
 }
 
-/* Modern Audio Preview */
 .audio-preview {
     margin-bottom: 20px;
     padding: 12px;
@@ -358,7 +354,6 @@ body.dark-mode .audio-preview-label {
     color: #ffffff;
 }
 
-/* Submit Button */
 .submit-button {
     background: transparent;
     color: #ff4d4d;
@@ -399,7 +394,6 @@ body.dark-mode .submit-button:hover {
     color: white;
 }
 
-/* Transcription Result */
 .transcription-result {
     margin-top: 16px;
     padding: 16px;

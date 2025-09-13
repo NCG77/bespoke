@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { initializeApp } from "firebase/app";
+import app from "../Others/firebase";
 import {
   getAuth,
   signInWithEmailAndPassword,
@@ -9,34 +9,35 @@ import {
 } from "firebase/auth";
 import "./Login_Signup.css";
 
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
-};
+function validateEmail(email: string) {
+  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+}
+function validatePassword(password: string) {
+  return password.length >= 6;
+}
 
 const LoginScreen = () => {
-  const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const navigate = useNavigate();
   const [email, setEmail] = useState({ value: "", error: "" });
   const [password, setPassword] = useState({ value: "", error: "" });
   const [loading, setLoading] = useState(false);
 
-  const onLoginPressed = async (e) => {
+  const onLoginPressed = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!email.value) {
-      setEmail({ ...email, error: "Email is required" });
-      return;
+    let valid = true;
+    if (!validateEmail(email.value)) {
+      setEmail({ ...email, error: "Enter a valid email address" });
+      valid = false;
     }
-    if (!password.value) {
-      setPassword({ ...password, error: "Password is required" });
-      return;
+    if (!validatePassword(password.value)) {
+      setPassword({
+        ...password,
+        error: "Password must be at least 6 characters",
+      });
+      valid = false;
     }
+    if (!valid) return;
     setLoading(true);
     try {
       const userCredential = await signInWithEmailAndPassword(
@@ -49,7 +50,10 @@ const LoginScreen = () => {
       navigate("/home");
     } catch (error) {
       setEmail({ ...email, error: "Invalid credentials" });
-      window.alert("Login Failed: " + error.message);
+      window.alert(
+        "Login Failed: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
     } finally {
       setLoading(false);
     }
@@ -64,18 +68,21 @@ const LoginScreen = () => {
       window.alert(`Login Successful! Welcome, ${user.email}`);
       navigate("/home");
     } catch (error) {
-      window.alert("Google Login Failed: " + error.message);
+      window.alert(
+        "Google Login Failed: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
+    <div className="signup-container">
+      <div className="signup-card">
         <h1>Bespoke</h1>
         <h2>Sign in to your account</h2>
-        <form className="login-form" onSubmit={onLoginPressed}>
+        <form className="signup-form" onSubmit={onLoginPressed}>
           <input
             type="email"
             placeholder="Email"

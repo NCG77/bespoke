@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { initializeApp } from "firebase/app";
+import app from "../Others/firebase";
 import {
   getAuth,
   createUserWithEmailAndPassword,
@@ -9,18 +9,19 @@ import {
 } from "firebase/auth";
 import "./Login_Signup.css";
 
-const firebaseConfig = {
-  apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-  authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-  storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-  messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-  appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
-};
+function validateEmail(email: string) {
+  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+}
+function validatePassword(password: string) {
+  return (
+    password.length >= 6 && /[A-Z]/.test(password) && /[0-9]/.test(password)
+  );
+}
+function validateName(name: string) {
+  return name.length >= 2 && /^[a-zA-Z\s]+$/.test(name);
+}
 
 const SignupScreen = () => {
-  const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
   const navigate = useNavigate();
   const [name, setName] = useState({ value: "", error: "" });
@@ -28,23 +29,29 @@ const SignupScreen = () => {
   const [password, setPassword] = useState({ value: "", error: "" });
   const [loading, setLoading] = useState(false);
 
-  const onSignupPressed = async (e) => {
+  const onSignupPressed = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (!name.value) {
-      setName({ ...name, error: "Name is required" });
-      return;
+    let valid = true;
+    if (!validateName(name.value)) {
+      setName({
+        ...name,
+        error: "Enter a valid name (letters only, min 2 chars)",
+      });
+      valid = false;
     }
-    if (!email.value) {
-      setEmail({ ...email, error: "Email is required" });
-      return;
+    if (!validateEmail(email.value)) {
+      setEmail({ ...email, error: "Enter a valid email address" });
+      valid = false;
     }
-    if (!password.value || password.value.length < 6) {
+    if (!validatePassword(password.value)) {
       setPassword({
         ...password,
-        error: "Password must be at least 6 characters",
+        error:
+          "Password must be 6+ chars, include a number and uppercase letter",
       });
-      return;
+      valid = false;
     }
+    if (!valid) return;
     setLoading(true);
     try {
       const userCredential = await createUserWithEmailAndPassword(
@@ -57,7 +64,10 @@ const SignupScreen = () => {
       navigate("/login");
     } catch (error) {
       setEmail({ ...email, error: "Email already in use" });
-      window.alert("Signup Failed: " + error.message);
+      window.alert(
+        "Signup Failed: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
     } finally {
       setLoading(false);
     }
@@ -70,9 +80,12 @@ const SignupScreen = () => {
       const result = await signInWithPopup(auth, provider);
       const user = result.user;
       window.alert(`Signup Successful! Welcome, ${user.email}`);
-      navigate("/");
+      navigate("/login");
     } catch (error) {
-      window.alert("Google Signup Failed: " + error.message);
+      window.alert(
+        "Google Signup Failed: " +
+          (error instanceof Error ? error.message : "Unknown error")
+      );
     } finally {
       setLoading(false);
     }
@@ -83,6 +96,9 @@ const SignupScreen = () => {
       <div className="signup-card">
         <h1>Bespoke</h1>
         <h2>Create an account</h2>
+        <p className="subtext">
+          A Bespoke account allows you to receive notes directly mailed to you.
+        </p>
         <form className="signup-form" onSubmit={onSignupPressed}>
           <input
             type="text"
@@ -117,21 +133,11 @@ const SignupScreen = () => {
           className="google-signup-button"
           onClick={onGoogleSignup}
           disabled={loading}
-          style={{
-            marginTop: 12,
-            background: "#fff",
-            color: "#333",
-            border: "1px solid #ddd",
-            padding: "10px",
-            borderRadius: "5px",
-            fontWeight: 500,
-            cursor: "pointer",
-          }}
         >
           Sign up with Google
         </button>
         <p className="login-prompt">
-          Already have an account? <a href="/">Sign in</a>
+          Already have an account? <a href="/login">Sign in</a>
         </p>
       </div>
     </div>
