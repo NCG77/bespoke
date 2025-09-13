@@ -2,6 +2,8 @@
 
 **Bespoke** is an intelligent voice recording and note-taking application that automatically transcribes your audio recordings and creates Textual form of the audio for further processing. Perfect for meetings, lectures or interviews. I made it as usually while discussing ideas and thoughts with friends or colleagues, I miss out on some important points or people miss out on joining the meetings or are late. With Bespoke, i can focus on the conversation while it captures everything for me and i can share the transcribe after the meeting in groups, make notes, give contexts to ai agents for further processing.
 
+### Site link : https://bespoke-fgji.vercel.app
+
 ## Features
 
 - **Voice Recording**: High-quality audio recording with visual feedback
