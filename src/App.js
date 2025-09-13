@@ -13,7 +13,7 @@ function App() {
     <Routes>
       <Route path="/" element={<LoginScreen />} />
       <Route path="/Signup" element={<SignupScreen />} />
-      <Route path="/Home" element={
+      <Route path="/HomePage" element={
         <RequireAuth>
           <HomePage />
         </RequireAuth>
